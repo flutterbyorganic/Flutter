@@ -1,0 +1,11 @@
+@import "~bootstrap/scss/bootstrap";
+@import "../scss/pages/common";
+@import "../scss/pages/button";
+@import "../scss/pages/dashboard";
+@import "../scss/pages/dashboardWelcome";
+@import "../scss/pages/table";
+@import "../scss/pages/fonts";
+
+body {
+    overflow-x: hidden;
+}

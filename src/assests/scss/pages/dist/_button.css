@@ -1,0 +1,129 @@
+.btn {
+  height: 40px;
+  font-size: 13px;
+  color: #000;
+  border-radius: 3px;
+  text-align: center;
+}
+.btn.wide {
+  width: 100%;
+}
+.btn:focus, .btn:active {
+  outline: 0;
+  box-shadow: none;
+}
+.btn.primary {
+  background-color: #ff5c39;
+  color: #fff;
+  box-shadow: unset;
+  outline: 0;
+  font-weight: 500;
+  border: solid 1px transparent;
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 576px) {
+  .btn.primary {
+    width: 100%;
+  }
+}
+.btn.primary:hover {
+  background-color: #ff5c39;
+  border: solid 1px transparent;
+}
+.btn.primary:active {
+  background-color: #ff5c39;
+  outline: 0;
+  box-shadow: none;
+}
+.btn.secondary:hover, .btn.secondary {
+  background: #fff;
+  color: #fff;
+}
+
+.boarding {
+  height: 36px;
+  padding: 0 15px 0 15px;
+  border-radius: 3px;
+  border: solid 1px #fff;
+  background-color: rgba(255, 255, 255, 0);
+  color: #fff !important;
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+}
+.boarding.sign-up:hover {
+  background-color: transparent;
+  border: solid 1px #fff;
+  color: #fff !important;
+}
+.boarding.sign-up:active {
+  background-color: transparent;
+  outline: 0;
+  box-shadow: none;
+  color: #fff !important;
+}
+
+.btn-primary {
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  background-color: transparent;
+  border-radius: 30px;
+  padding: 0 24px;
+  border: 1px solid rgba(216, 216, 216, 0.3);
+  text-transform: uppercase;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+.btn-primary.active {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid rgba(216, 216, 216, 0.3) !important;
+  color: white;
+  background-color: #1f1a18;
+  border: transparent;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  box-shadow: none;
+  outline: 0;
+  border: 1px solid rgba(216, 216, 216, 0.3) !important;
+  color: white;
+  background-color: #1f1a18;
+  border: transparent;
+}
+.btn-primary:hover:focus, .btn-primary:focus:focus, .btn-primary:active:focus {
+  box-shadow: none;
+}
+.btn-primary.disabled, .btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.btn-secondary {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1f1a18;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 0 24px;
+  border: none;
+  text-transform: capitalize;
+  height: 40px;
+}
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+  box-shadow: none;
+  outline: 0;
+  background-color: #fff !important;
+  color: #1f1a18;
+}
+.btn-secondary:hover:focus, .btn-secondary:focus:focus, .btn-secondary:active:focus {
+  box-shadow: none;
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  background-color: #fff !important;
+  color: #1f1a18;
+}

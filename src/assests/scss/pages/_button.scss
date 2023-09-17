@@ -1,0 +1,138 @@
+
+
+.btn {
+  // padding: $font-size13;
+  height: 40px;
+  font-size: 13px;
+  color: #000;
+  border-radius: 3px;
+  text-align: center;
+  &.wide {
+    width: 100%;
+  }
+  &:focus,
+  &:active {
+    outline: 0;
+    box-shadow: none;
+  }
+  &.primary {
+    background-color: #ff5c39;
+    color: #fff;
+    box-shadow: unset;
+    outline: 0;
+    font-weight: 500;
+    border: solid 1px transparent;
+    display: flex;
+    justify-content: center;
+    @media (max-width: 576px){
+      width: 100%;
+    }
+    &:hover {
+      background-color: #ff5c39;
+      border: solid 1px transparent;
+    }
+    &:active {
+      background-color: #ff5c39;
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+  &.secondary:hover,
+  &.secondary {
+    background: #fff;
+    color: #fff;
+  }
+}
+
+.boarding {
+  height: 36px;
+  padding: 0 15px 0 15px;
+  border-radius: 3px;
+  border: solid 1px #fff;
+  background-color: rgba(255, 255, 255, 0);
+  color: #fff !important;
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+  &.sign-up {
+    &:hover {
+      background-color: transparent;
+      border: solid 1px #fff;
+      color: #fff !important;
+    }
+    &:active {
+      background-color: transparent;
+      outline: 0;
+      box-shadow: none;
+      color: #fff !important;
+    }
+  }
+}
+// button for card only 
+.btn-primary{
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  background-color: transparent;
+  border-radius: 30px;
+  padding: 0 24px;
+  border: 1px solid rgba(216, 216, 216, 0.3);
+  text-transform: uppercase;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  &.active{
+      box-shadow: none;
+      outline: 0;
+      border: 1px solid rgba(216, 216, 216, 0.3) !important;
+      color: rgb(255, 255, 255);
+      background-color: rgb(31, 26, 24);
+      border: transparent;
+  }
+  &:hover,
+  &:focus,
+  &:active {
+      box-shadow: none;
+      outline: 0;
+      border: 1px solid rgba(216, 216, 216, 0.3) !important;
+      color: rgb(255, 255, 255);
+      background-color: rgb(31, 26, 24);
+      border: transparent;
+      &:focus{
+          box-shadow: none;
+      }
+  }
+  &.disabled,
+  &:disabled {
+      opacity: 0.5;
+  }
+}
+.btn-secondary{
+  font-size: 14px;
+  font-weight: 400;
+  color: #1f1a18;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 0 24px;
+  border: none;
+  text-transform: capitalize;
+  height: 40px;
+  &:hover,
+  &:focus,
+  &:active {
+      box-shadow: none;
+      outline: 0;
+      background-color: #fff !important;
+      color: #1f1a18;
+      &:focus{
+          box-shadow: none;
+      }
+  }
+  &:disabled {
+      opacity: 0.5;
+      background-color: #fff !important;
+      color: #1f1a18;
+  }
+}
