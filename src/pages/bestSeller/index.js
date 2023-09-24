@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, Col, Container, Image, ListGroup, Nav, NavLink, Row } from "react-bootstrap";
 import Slider from 'react-slick';
+import { addItem } from "../../redux/slices/cartSlice";
+import { useDispatch } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import seller from '../../assests/img/seller.png';
@@ -11,6 +13,10 @@ import collection1 from '../../assests/img/collection1.png';
 
 
 const Bestsellers = () => {
+
+  const dispatch = useDispatch();
+  const [price, setPrice] = useState(100);
+  const [name, setName] = useState(100);
 
   const settings2 = {
     dots: false,
@@ -60,7 +66,9 @@ const Bestsellers = () => {
                 <Nav.Link className="seller-title text-truncate">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
                 <div className="slider-item-wrap">
                   <h5>$35</h5>
-                  <Nav.Link>Add +</Nav.Link>
+                  <Nav.Link onClick={(e) =>
+                      dispatch(addItem({ name: name, price}))
+                    }>Add +</Nav.Link>
                 </div>
               </div>
               <div className="slider-item">

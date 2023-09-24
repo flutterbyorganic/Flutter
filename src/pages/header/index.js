@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Nav } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { getItemsSelector } from "../../redux/slices/cartSlice";
 
 
 const Header = () => {
-    
+  const items = useSelector(getItemsSelector);
+  const total = items.reduce((a, b) => a + b.price, 0);
 
     return (
         <>
@@ -12,6 +15,9 @@ const Header = () => {
             activeKey="/home"
             onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
           >
+            <Nav.Item>
+              <li>Item count: {items.length}, Total price: {total}</li>
+            </Nav.Item>
             <Nav.Item>
               <Nav.Link href="/home">Bath & Body</Nav.Link>
             </Nav.Item>
