@@ -18,17 +18,22 @@ const Sidebar = () => {
                         <ul className="nav">
                             <li className="nav-item">
                                 <NavLink className="nav-link active">
-                                    <span className="icon-dashboard" /> Dashboard
+                                    <Link to="/category"><span className="icon-dashboard" /> Category</Link>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link">
-                                    <span className="icon-tank" /> Account
+                                    <Link to="/sub-category"><span className="icon-dashboard" /> Sub-Category</Link>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link">
-                                    <span className="icon-probes-catalog" /> Tank Catalog
+                                <Link to="/product"><span className="icon-tank" /> Product</Link>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className="nav-link">
+                                    <Link to="/add-banner"><span className="icon-dashboard" /> Add Banner</Link>
                                 </NavLink>
                             </li>
                         </ul>
