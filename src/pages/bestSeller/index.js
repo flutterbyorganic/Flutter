@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Image, ListGroup, Nav, NavLink, Row } from "react-bootstrap";
 import Slider from 'react-slick';
 import { addItem } from "../../redux/slices/cartSlice";
@@ -10,9 +10,27 @@ import seller2 from '../../assests/img/seller2.png';
 import seller3 from '../../assests/img/seller3.png';
 import collection from '../../assests/img/collection.png';
 import collection1 from '../../assests/img/collection1.png';
+import { fetchData } from "../../apis/api";
 
 
 const Bestsellers = () => {
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    // Call the fetchData function
+    fetchData('/categories')
+      .then((result) => {
+        setData(result);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+    }, []);
+  console.log("data ", data);
+
+  // const {category} = data;
+  // console.log("category ", category);
 
   const dispatch = useDispatch();
   const [price, setPrice] = useState(100);
@@ -54,6 +72,15 @@ const Bestsellers = () => {
 
     return (
         <>
+
+        {/* for testing api's working or not ? */}
+        {data?.map((item)=> (
+            <div key={item?._id}>
+                {item.category}
+            </div>
+        ))}
+        {/* for testing api's working or not ? */}
+
           <Container className="best-slider">
             <div className="header-title">
                 <h1>Bestsellers</h1>

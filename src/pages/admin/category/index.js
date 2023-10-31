@@ -1,15 +1,70 @@
-import { useState } from "react";
-import { Row, Dropdown, Button, Form, InputGroup, DropdownButton, Col, Modal, } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
-import Sidebar from "../../sidebar";
-import AdminHeader from "../adminHeader";
+import { deleteData, fetchData, postData } from "../../../apis/api";
 
 const Category = () => {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [category, setCategory] = useState(null);
+
+    // for deleting the row
+    const [deletedData, setDeletedData] = useState([]);
+    const [selectedItemId, setSelectedItemId] = useState(null);
+
+    // for fetch the data
+    useEffect(() => {
+        if (selectedItemId) {
+            deleteData(`/categories/${selectedItemId}`)
+                .then(() => {
+                    setSelectedItemId(null);
+                    fetchCategories();
+                })
+                .catch((error) => {
+                    setSelectedItemId(null);
+                    console.error('Error deleting item:', error);
+                });
+        }
+    }, [selectedItemId]);
+
+    //for submiting data into database
+    const [formData, setFormData] = useState({
+        name: '',
+        priority: '',
+    });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+    const handlePostData = (e) => {
+        e.preventDefault();
+        // Post data
+        postData("/categories", formData, { accept: 'application/json' })
+            .then((result) => {
+                console.log('Data posted successfully:', result);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const fetchCategories = () => {
+        fetchData('/categories')
+            .then((result) => {
+                setCategory(result);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    // for fetch the data
+    useEffect(() => {
+        // Call the fetchData function
+        fetchCategories();
+    }, []);
 
     return (
         <>
@@ -69,40 +124,45 @@ const Category = () => {
                             </div>
                         </div>
                         <div className="tbody">
-                            <div className="row tr">
-                                <div className="td flex-table-column-25">
-                                    <p className="listing-title text-capitalize">Name</p>
-                                </div>
-                                <div className="td flex-table-column-25">
-                                    <div>
-                                        <p className="listing-normal mb-0">litre</p>
+                            {category?.map((cat, index) => (
+                                <div className="row tr" key={index + 1}>
+                                    <div className="td flex-table-column-25">
+                                        <p className="listing-title text-capitalize">{cat.name}</p>
                                     </div>
-                                </div>
-                                <div className="td flex-table-column-35">
-                                    <p className="listing-normal mb-0">Description</p>
-                                </div>
-                                <div className="td flex-table-column-15">
-                                    <div className="listing-normal">
-                                        <div className="listing-normal text-center">
-                                            <DropdownButton className="icon-three-dot manage-three-dot">
-                                                <Dropdown.Item>Edit</Dropdown.Item>
-                                                <Dropdown.Item>Delete</Dropdown.Item>
+                                    <div className="td flex-table-column-25">
+                                        <div>
+                                            <p className="listing-normal mb-0">{cat.priority}</p>
+                                        </div>
+                                    </div>
+                                    <div className="td flex-table-column-35">
+                                        <p className="listing-normal mb-0">Description</p>
+                                    </div>
+                                    <div className="td flex-table-column-15">
+                                        <div className="listing-normal">
+                                            <div className="listing-normal text-center">
+                                                <DropdownButton className="icon-three-dot manage-three-dot">
+                                                    <Dropdown.Item>Edit</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() =>
+                                                        setSelectedItemId(cat._id)
+                                                    }>Delete</Dropdown.Item>
                                             </DropdownButton>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                                </div>
+                        ))
+                            }
                     </div>
                 </div>
             </div>
+        </div >
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Add Category</Modal.Title>
-                    <img className="btn-close" src={closeIcon} alt="close icon" />
+                    <img className="btn-close" src={closeIcon} alt="close icon" onClick={handleClose} />
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={(e) => handlePostData(e)}>
                         <Row className="modal-body-form">
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">
@@ -112,8 +172,10 @@ const Category = () => {
                                             type="type"
                                             className="form-input"
                                             placeholder="Enter name"
+                                            id="name"
                                             name="name"
-                                            autoComplete="off"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                 </Form.Group>
@@ -123,16 +185,18 @@ const Category = () => {
                                     <Form.Label>Priority</Form.Label>
                                     <div className="wrap-input">
                                         <Form.Control
-                                            type="type"
+                                            type="number"
                                             className="form-input"
-                                            placeholder="Enter name"
-                                            name="name"
-                                            autoComplete="off"
+                                            placeholder="Enter priority"
+                                            id="priority"
+                                            name="priority"
+                                            value={formData.priority}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                 </Form.Group>
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            {/* <Col xs={12} sm={12} className=" ">
                                 <div className="wrap-select wrap-input">
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
@@ -148,7 +212,7 @@ const Category = () => {
                                     <Form.Label>Logo (Optional)</Form.Label>
                                     <Form.Control type="file" />
                                 </Form.Group>
-                            </Col>
+                            </Col> */}
                         </Row>
                         <div className="footer-modal">
                             <Button type="submit" className="btn primary modal-btn-submit">Add</Button>
@@ -161,4 +225,4 @@ const Category = () => {
     )
 }
 
-export default Category
+export default Category;
