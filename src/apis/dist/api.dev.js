@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteData = exports.postData = exports.fetchData = void 0;
+exports.updateData = exports.deleteData = exports.postData = exports.fetchData = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -96,3 +96,31 @@ var deleteData = function deleteData(endpoint) {
 };
 
 exports.deleteData = deleteData;
+
+var updateData = function updateData(endpoint, data) {
+  return regeneratorRuntime.async(function updateData$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return regeneratorRuntime.awrap(_axios["default"].put(baseURL + endpoint, data));
+
+        case 3:
+          return _context4.abrupt("return", _context4.sent);
+
+        case 6:
+          _context4.prev = 6;
+          _context4.t0 = _context4["catch"](0);
+          console.error("Error updating data:", _context4.t0);
+          throw _context4.t0;
+
+        case 10:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  }, null, null, [[0, 6]]);
+};
+
+exports.updateData = updateData;

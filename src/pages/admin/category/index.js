@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
-import { deleteData, fetchData, postData } from "../../../apis/api";
+import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const Category = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
+    const [formData, setFormData] = useState({
+        id: '',
+        name: '',
+        priority: '',
+    });
 
     // for deleting the row
-    const [deletedData, setDeletedData] = useState([]);
     const [selectedItemId, setSelectedItemId] = useState(null);
 
     // for fetch the data
@@ -29,11 +33,20 @@ const Category = () => {
         }
     }, [selectedItemId]);
 
+    const resetFormData = () => {
+        setFormData({
+            id: '',
+            name: '',
+            priority: '',
+        });
+    }
+
+    const apiRefresh = () => {
+        fetchCategories();
+        handleClose();
+    }
+
     //for submiting data into database
-    const [formData, setFormData] = useState({
-        name: '',
-        priority: '',
-    });
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -41,19 +54,47 @@ const Category = () => {
     const handlePostData = (e) => {
         e.preventDefault();
         // Post data
-        postData("/categories", formData, { accept: 'application/json' })
-            .then((result) => {
-                console.log('Data posted successfully:', result);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
+        if (formData.id === '') {
+            postData(routeName, formData, { accept: 'application/json' })
+                .then((result) => {
+                    console.log('Data posted successfully:', result);
+                    resetFormData();
+                    apiRefresh();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        else {
+            updateData(routeName, formData)
+                .then((result) => {
+                    console.log('Edit successfully:', result);
+                    resetFormData();
+                    apiRefresh();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     };
 
-    const fetchCategories = () => {
-        fetchData('/categories')
+    // id = null means all category else selected id category
+    const fetchCategories = (id = null) => {
+        const routeName = id === null ? '/categories' : `/categories/${id}`;
+        fetchData(routeName)
             .then((result) => {
-                setCategory(result);
+                if (id === null) {
+                    setCategory(result);
+                }
+                else {
+                    setFormData({
+                        id: result._id,
+                        name: result.name,
+                        priority: result.priority.toString(), // Convert to string if needed
+                    });
+                    handleShow();
+                }
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -64,6 +105,8 @@ const Category = () => {
     useEffect(() => {
         // Call the fetchData function
         fetchCategories();
+
+        console.log("setSelectedItemId ", selectedItemId);
     }, []);
 
     return (
@@ -141,25 +184,29 @@ const Category = () => {
                                         <div className="listing-normal">
                                             <div className="listing-normal text-center">
                                                 <DropdownButton className="icon-three-dot manage-three-dot">
-                                                    <Dropdown.Item>Edit</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => fetchCategories(cat._id)}> Edit</Dropdown.Item>
+                                                    {/* <Dropdown.Item onClick={() => setSelectedItemId(cat._id)}> Edit</Dropdown.Item> */}
                                                     <Dropdown.Item onClick={() =>
                                                         setSelectedItemId(cat._id)
                                                     }>Delete</Dropdown.Item>
-                                            </DropdownButton>
+                                                </DropdownButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
-                        ))
+                            ))
                             }
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div >
+            </div >
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>Add Category</Modal.Title>
-                    <img className="btn-close" src={closeIcon} alt="close icon" onClick={handleClose} />
+                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Category</Modal.Title>
+                    <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
+                        resetFormData();
+                        handleClose();
+                    }} />
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={(e) => handlePostData(e)}>
@@ -215,7 +262,7 @@ const Category = () => {
                             </Col> */}
                         </Row>
                         <div className="footer-modal">
-                            <Button type="submit" className="btn primary modal-btn-submit">Add</Button>
+                            <Button type="submit" className="btn primary modal-btn-submit">{formData.id === '' ? 'Add' : 'Update'} </Button>
                         </div>
                     </Form>
                 </Modal.Body>

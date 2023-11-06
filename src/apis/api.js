@@ -28,3 +28,12 @@ export const deleteData = async (endpoint) => {
     throw error;
   }
 };
+
+export const updateData = async (endpoint,data) => {
+  try {
+    return await axios.put(baseURL+endpoint,data);
+  } catch (error) {
+    console.error("Error updating data:", error);
+    throw error;
+  }
+};
