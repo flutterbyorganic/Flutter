@@ -13,6 +13,7 @@ const Category = () => {
         id: '',
         name: '',
         priority: '',
+        logo: '',
     });
 
     // for deleting the row
@@ -38,6 +39,7 @@ const Category = () => {
             id: '',
             name: '',
             priority: '',
+            logo: '',
         });
     }
 
@@ -49,11 +51,19 @@ const Category = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        if(name === 'logo') {
+          let file = e.target.files[0]
+          setFormData(pre => ({ ...pre, [name]: file}))
+        //   setFormData({...formData, [name]: file});
+        }
+        setFormData(pre => ({ ...pre, [name]: value}))
+        console.log("formData.logo ", formData);
     };
+
     const handlePostData = (e) => {
         e.preventDefault();
-        // Post data
+        console.log("logo ", formData.logo);
         const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
         if (formData.id === '') {
             postData(routeName, formData, { accept: 'application/json' })
@@ -80,11 +90,11 @@ const Category = () => {
     };
 
     // id = null means all category else selected id category
-    const fetchCategories = (id = null) => {
-        const routeName = id === null ? '/categories' : `/categories/${id}`;
+    const fetchCategories = (id = '') => {
+        const routeName = id === '' ? '/categories' : `/categories/${id}`;
         fetchData(routeName)
             .then((result) => {
-                if (id === null) {
+                if (id === '') {
                     setCategory(result);
                 }
                 else {
@@ -92,6 +102,7 @@ const Category = () => {
                         id: result._id,
                         name: result.name,
                         priority: result.priority.toString(), // Convert to string if needed
+                        logo: result.logo,
                     });
                     handleShow();
                 }
@@ -138,7 +149,7 @@ const Category = () => {
                     <div className="table-wrapper mobile-optimised">
                         <div className="thead">
                             <div className="row tr">
-                                <div className="th flex-table-column-25" >
+                                <div className="th flex-table-column-20" >
                                     <span className="table-heading">
                                         <span>Name</span>
                                         <span className="icon-filter-custom">
@@ -146,7 +157,12 @@ const Category = () => {
                                         </span>
                                     </span>
                                 </div>
-                                <div className="th flex-table-column-25" >
+                                <div className="th flex-table-column-20" >
+                                    <span className="table-heading">
+                                        <span>Image</span>
+                                    </span>
+                                </div>
+                                <div className="th flex-table-column-20" >
                                     <span className="table-heading">
                                         <span>Priority</span>
                                         <span className="icon-filter-custom">
@@ -154,7 +170,7 @@ const Category = () => {
                                         </span>
                                     </span>
                                 </div>
-                                <div className="th flex-table-column-35" >
+                                <div className="th flex-table-column-25" >
                                     <span className="table-heading">
                                         <span>Logo</span>
                                     </span>
@@ -169,15 +185,18 @@ const Category = () => {
                         <div className="tbody">
                             {category?.map((cat, index) => (
                                 <div className="row tr" key={index + 1}>
-                                    <div className="td flex-table-column-25">
+                                    <div className="td flex-table-column-20">
                                         <p className="listing-title text-capitalize">{cat.name}</p>
                                     </div>
-                                    <div className="td flex-table-column-25">
+                                    <div className="td flex-table-column-20">
+                                        <img src={cat.logo} alt="logo" width="40" />
+                                    </div>
+                                    <div className="td flex-table-column-20">
                                         <div>
                                             <p className="listing-normal mb-0">{cat.priority}</p>
                                         </div>
                                     </div>
-                                    <div className="td flex-table-column-35">
+                                    <div className="td flex-table-column-25">
                                         <p className="listing-normal mb-0">Description</p>
                                     </div>
                                     <div className="td flex-table-column-15">
@@ -243,7 +262,7 @@ const Category = () => {
                                     </div>
                                 </Form.Group>
                             </Col>
-                            {/* <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className=" ">
                                 <div className="wrap-select wrap-input">
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
@@ -257,9 +276,9 @@ const Category = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" />
+                                    <Form.Control type="file" value={formData.logo} name='logo' onChange={handleInputChange} />
                                 </Form.Group>
-                            </Col> */}
+                            </Col>
                         </Row>
                         <div className="footer-modal">
                             <Button type="submit" className="btn primary modal-btn-submit">{formData.id === '' ? 'Add' : 'Update'} </Button>
