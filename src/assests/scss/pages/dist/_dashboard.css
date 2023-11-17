@@ -772,3 +772,15 @@ textarea:hover, textarea:focus {
 .react-upload-file input {
   height: auto !important;
 }
+
+.form-select {
+  color: #fff !important;
+  background-color: #303039 !important;
+  border: 1px solid #303039;
+  background-image: url("../../img/down-arrow.svg");
+}
+.form-select:focus {
+  border-color: #303039;
+  outline: 0;
+  box-shadow: unset;
+}

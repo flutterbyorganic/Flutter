@@ -808,3 +808,14 @@ textarea {
     height: auto !important;
   }
 }
+.form-select {
+  color: #fff !important;
+  background-color: #303039 !important;
+  border: 1px solid #303039;
+  background-image: url('../../img/down-arrow.svg');
+  &:focus {
+    border-color: #303039;
+    outline: 0;
+    box-shadow: unset;
+  }
+}

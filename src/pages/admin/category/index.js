@@ -13,6 +13,7 @@ const Category = () => {
         id: '',
         name: '',
         priority: '',
+        status: '',
         logo: '',
     });
 
@@ -39,6 +40,7 @@ const Category = () => {
             id: '',
             name: '',
             priority: '',
+            status: '',
             logo: '',
         });
     }
@@ -51,19 +53,20 @@ const Category = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
+        console.log('vaaa', e.target, e.target.value)
         if(name === 'logo') {
           let file = e.target.files[0]
           setFormData(pre => ({ ...pre, [name]: file}))
         //   setFormData({...formData, [name]: file});
         }
+        console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
         setFormData(pre => ({ ...pre, [name]: value}))
-        console.log("formData.logo ", formData);
     };
+
 
     const handlePostData = (e) => {
         e.preventDefault();
-        console.log("logo ", formData.logo);
+        console.log("formDataformData ", formData);
         const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
         if (formData.id === '') {
             postData(routeName, formData, { accept: 'application/json' })
@@ -71,6 +74,7 @@ const Category = () => {
                     console.log('Data posted successfully:', result);
                     resetFormData();
                     apiRefresh();
+                    console.log("formData.logo ", formData);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -102,6 +106,7 @@ const Category = () => {
                         id: result._id,
                         name: result.name,
                         priority: result.priority.toString(), // Convert to string if needed
+                        status: result.status,
                         logo: result.logo,
                     });
                     handleShow();
@@ -172,12 +177,12 @@ const Category = () => {
                                 </div>
                                 <div className="th flex-table-column-25" >
                                     <span className="table-heading">
-                                        <span>Logo</span>
+                                        <span>Status</span>
                                     </span>
                                 </div>
                                 <div className="th flex-table-column-15 text-center">
                                     <span className="table-heading">
-                                        <span>Status</span>
+                                        <span>Action</span>
                                     </span>
                                 </div>
                             </div>
@@ -197,7 +202,7 @@ const Category = () => {
                                         </div>
                                     </div>
                                     <div className="td flex-table-column-25">
-                                        <p className="listing-normal mb-0">Description</p>
+                                        <p className="listing-normal mb-0">Active</p>
                                     </div>
                                     <div className="td flex-table-column-15">
                                         <div className="listing-normal">
@@ -266,9 +271,9 @@ const Category = () => {
                                 <div className="wrap-select wrap-input">
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
-                                        <Form.Select>
-                                            <option>Active</option>
-                                            <option>Inactive</option>
+                                        <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>
