@@ -17,7 +17,7 @@ const SubCategory = () => {
         category: '',
         name: '',
         priority: '',
-        status: '',
+        status: 'option2',
         logo: '',
     });
 
@@ -263,7 +263,7 @@ const SubCategory = () => {
                         <Row className="modal-body-form">
                             <Col xs={12} sm={12} className=" ">
                                 <div className="wrap-select wrap-input">
-                                    <Form.Label>Status</Form.Label>
+                                    <Form.Label>Category</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.category} name="category" onChange={handleInputChange}>
                                             {category?.map((cat, index) => (
@@ -297,7 +297,7 @@ const SubCategory = () => {
                                         <Form.Control
                                             type="type"
                                             className="form-input"
-                                            placeholder="Enter name"
+                                            placeholder="Enter priority"
                                             name="priority"
                                             autoComplete="off"
                                             value={formData.priority}

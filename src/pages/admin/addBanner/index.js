@@ -104,6 +104,30 @@ const AddBanner = () => {
                 <Modal.Body>
                     <Form>
                         <Row className="modal-body-form">
+                        <Col xs={12} sm={12} className=" ">
+                                <div className="wrap-select wrap-input">
+                                    <Form.Label>Category</Form.Label>
+                                    <Form.Group className="mb-3">
+                                        <Form.Select  name="category">
+                                            {/* {category?.map((cat, index) => ( */}
+                                                <option >Category</option>
+                                            {/* ))} */}
+                                        </Form.Select>
+                                    </Form.Group>
+                                </div>
+                            </Col>
+                            <Col xs={12} sm={12} className=" ">
+                                <div className="wrap-select wrap-input">
+                                    <Form.Label>SubCategory</Form.Label>
+                                    <Form.Group className="mb-3">
+                                        <Form.Select  name="category">
+                                            {/* {category?.map((cat, index) => ( */}
+                                                <option >SubCategory</option>
+                                            {/* ))} */}
+                                        </Form.Select>
+                                    </Form.Group>
+                                </div>
+                            </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Banner Image</Form.Label>

@@ -778,6 +778,7 @@ textarea:hover, textarea:focus {
   background-color: #303039 !important;
   border: 1px solid #303039;
   background-image: url("../../img/down-arrow.svg");
+  height: 44px;
 }
 .form-select:focus {
   border-color: #303039;
