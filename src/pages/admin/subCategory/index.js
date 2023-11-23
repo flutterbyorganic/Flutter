@@ -14,7 +14,7 @@ const SubCategory = () => {
     const [subCategory, setSubCategory] = useState(null);
     const [formData, setFormData] = useState({
         id: '',
-        category: '',
+        categoryId: '',
         name: '',
         priority: '',
         status: 'option2',
@@ -42,7 +42,7 @@ const SubCategory = () => {
     const resetFormData = () => {
         setFormData({
             id: '',
-            category: '',
+            categoryId: '',
             name: '',
             priority: '',
             status: '',
@@ -104,17 +104,6 @@ const SubCategory = () => {
             .then((result) => {
                 if (id === '') {
                     setSubCategory(result);
-                }
-                else {
-                    setFormData({
-                        id: result._id,
-                        category: result.category,
-                        name: result.name,
-                        priority: result.priority.toString(), // Convert to string if needed
-                        status: result.status,
-                        logo: result.logo,
-                    });
-                    handleShow();
                 }
             })
             .catch((error) => {
@@ -214,7 +203,7 @@ const SubCategory = () => {
                             {subCategory?.map((cat, index) => (
                                 <div className="row tr" key={index + 1}>
                                     <div className="td flex-table-column-20">
-                                        <p className="listing-title text-capitalize">{cat.category}</p>
+                                        <p className="listing-title text-capitalize">{cat.categoryId}</p>
                                     </div>
                                     <div className="td flex-table-column-20">
                                         <p className="listing-title text-capitalize">{cat.name}</p>
@@ -265,9 +254,9 @@ const SubCategory = () => {
                                 <div className="wrap-select wrap-input">
                                     <Form.Label>Category</Form.Label>
                                     <Form.Group className="mb-3">
-                                        <Form.Select value={formData.category} name="category" onChange={handleInputChange}>
+                                        <Form.Select value={formData.category} name="categoryId" onChange={handleInputChange}>
                                             {category?.map((cat, index) => (
-                                                <option value={cat?.name} key={index + 1}>{cat?.name}</option>
+                                                <option value={cat?._id} key={index + 1}>{cat?.name}</option>
                                             )
                                             )}
                                         </Form.Select>
