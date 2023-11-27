@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const Category = () => {
+    const [value, setValue] = useState("");
+    const inputRef = useRef();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -53,12 +55,15 @@ const Category = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('vaaa', e.target, e.target.value)
-        if(name === 'logo') {
-          let file = e.target.files[0]
-          setFormData(pre => ({ ...pre, [name]: file}))
+        // console.log('vaaa', e.target, e.target.value)
+        setValue(inputRef.current.value);
+        console.log("valuevalue ", value)
+        setFormData(pre => ({ ...pre, [name]: value}));
+        // if(name === 'logo') {
+        //   let file = e.target.files[0];
+        //   setFormData(pre => ({ ...pre, [name]: file}))
         //   setFormData({...formData, [name]: file});
-        }
+        // }
         console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
         setFormData(pre => ({ ...pre, [name]: value}))
     };
@@ -95,6 +100,7 @@ const Category = () => {
 
     // id = null means all category else selected id category
     const fetchCategories = (id = '') => {
+        console.log("call edit function ", id);
         const routeName = id === '' ? '/categories' : `/categories/${id}`;
         fetchData(routeName)
             .then((result) => {
@@ -109,6 +115,7 @@ const Category = () => {
                         status: result.status,
                         logo: result.logo,
                     });
+                    console.log("formDataformDataformDataformDataformDataformData", formData);
                     handleShow();
                 }
             })
@@ -121,8 +128,6 @@ const Category = () => {
     useEffect(() => {
         // Call the fetchData function
         fetchCategories();
-
-        console.log("setSelectedItemId ", selectedItemId);
     }, []);
 
     return (
@@ -281,7 +286,7 @@ const Category = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" value={formData.logo} name='logo' onChange={handleInputChange} />
+                                    <Form.Control type="file" ref={inputRef} value={value} name='logo' onChange={handleInputChange} />
                                 </Form.Group>
                             </Col>
                         </Row>
