@@ -19,6 +19,7 @@ import Category from './pages/admin/category';
 import Product from './pages/admin/product';
 import SubCategory from './pages/admin/subCategory';
 import AddBanner from './pages/admin/addBanner';
+import ProductDetail from './pages/frontend/product-detail';
 
 // const router = createBrowserRouter([
 //   {
@@ -52,6 +53,7 @@ root.render(
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/product-detail" element={<ProductDetail />} />
             <Route element={<Dashboard />}>
               <Route path="/category" element={<Category />} />
               <Route path="/sub-category" element={<SubCategory />} />

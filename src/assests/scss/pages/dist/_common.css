@@ -280,6 +280,43 @@
   font-size: 16px;
 }
 
+.main-slider .slick-prev {
+  z-index: 1;
+}
+.main-slider .slick-prev::before {
+  content: url("../../img/white-left-arrow2.svg") !important;
+  top: 0;
+  position: absolute;
+  margin: 0;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1 !important;
+  width: 50px;
+  height: 50px;
+  background-color: #1A1A1A;
+  border-radius: 50%;
+  left: 60px;
+}
+.main-slider .slick-next::before {
+  content: url("../../img/white-left-arrow2.svg") !important;
+  top: 0;
+  position: absolute;
+  transform: rotate(180deg);
+  margin: 0;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1 !important;
+  width: 50px;
+  height: 50px;
+  background-color: #1A1A1A;
+  border-radius: 50%;
+  right: 40px;
+}
+
 .collection .collection-row {
   gap: 10%;
 }

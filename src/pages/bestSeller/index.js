@@ -8,8 +8,6 @@ import "slick-carousel/slick/slick-theme.css";
 import seller from '../../assests/img/seller.png';
 import seller2 from '../../assests/img/seller2.png';
 import seller3 from '../../assests/img/seller3.png';
-import collection from '../../assests/img/collection.png';
-import collection1 from '../../assests/img/collection1.png';
 import { fetchData } from "../../apis/api";
 
 
@@ -130,42 +128,6 @@ const Bestsellers = () => {
               </div>
             </Slider>
 
-            <div className="collection">
-                <Row className="collection-row">
-                  <Col xs={12} md={6} className="collection-left">
-                    <Image className="w-100" src={collection} alt="Collection Icon" />
-                    <div className="collection-wrap">
-                      <h2>The Peppers Collection</h2>
-                      <p>Meet our iconic fragrant power couple - an energising pair of bold, woody-spicy notes</p>
-                      <Button className="btn-secondary">Shop Now</Button>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={6} className="collection-left">
-                    <Image className="w-100" src={collection1} alt="Collection1 Icon" />
-                    <div className="collection-wrap">
-                      <h2>The Peppers Collection</h2>
-                      <p>Meet our iconic fragrant power couple - an energising pair of bold, woody-spicy notes</p>
-                      <Button className="btn-secondary">Shop Now</Button>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={6} className="collection-left">
-                    <Image className="w-100" src={collection1} alt="Collection1 Icon" />
-                    <div className="collection-wrap">
-                      <h2>The Peppers Collection</h2>
-                      <p>Meet our iconic fragrant power couple - an energising pair of bold, woody-spicy notes</p>
-                      <Button className="btn-secondary">Shop Now</Button>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={6} className="collection-left">
-                    <Image className="w-100" src={collection} alt="Collection Icon" />
-                    <div className="collection-wrap">
-                      <h2>The Peppers Collection</h2>
-                      <p>Meet our iconic fragrant power couple - an energising pair of bold, woody-spicy notes</p>
-                      <Button className="btn-secondary">Shop Now</Button>
-                    </div>
-                  </Col>
-                </Row>
-            </div>
           </Container>
         </>
     )

@@ -48,7 +48,9 @@ var postData = function postData(endpoint, data, headers) {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return regeneratorRuntime.awrap(_axios["default"].post(baseURL + endpoint, data, headers));
+          return regeneratorRuntime.awrap(_axios["default"].post(baseURL + endpoint, data, {
+            'Content-Type': 'application/json'
+          }));
 
         case 3:
           response = _context2.sent;

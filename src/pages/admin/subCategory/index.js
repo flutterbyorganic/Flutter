@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Row, Dropdown, Button, Form, InputGroup, DropdownButton, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
@@ -7,6 +7,8 @@ import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const SubCategory = () => {
+    const [image, setImage] = useState("");
+    const inputRef = useRef();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -58,13 +60,17 @@ const SubCategory = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('vaaa', e.target, e.target.value)
-        if (name === 'logo') {
-            let file = e.target.files[0]
-            setFormData(pre => ({ ...pre, [name]: file }))
-            //   setFormData({...formData, [name]: file});
-        }
-        setFormData(pre => ({ ...pre, [name]: value }))
+        // console.log('vaaa', e.target, e.target.value)
+        setImage(inputRef.current.value);
+        console.log("valuevalue ", value);
+        setFormData(pre => ({ ...pre, [name]: value}));
+        // if(name === 'logo') {
+        //   let file = e.target.files[0];
+        //   setFormData(pre => ({ ...pre, [name]: file}))
+        //   setFormData({...formData, [name]: file});
+        // }
+        // console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
+        setFormData(pre => ({ ...pre, [name]: value}));
     };
 
 
@@ -99,11 +105,24 @@ const SubCategory = () => {
 
     // id = null means all category else selected id category
     const fetchSubCategories = (id = '') => {
+        console.log("call edit function ", id);
         const routeName = id === '' ? '/subCategories' : `/subCategories/${id}`;
         fetchData(routeName)
             .then((result) => {
                 if (id === '') {
                     setSubCategory(result);
+                }
+                else {
+                    setFormData({
+                        id: result._id,
+                        categoryId: result.categoryId,
+                        name: result.name,
+                        priority: result.priority.toString(), // Convert to string if needed
+                        status: result.status,
+                        logo: result.logo,
+                    });
+                    console.log("formDataformDataformDataformDataformDataformData", formData);
+                    handleShow();
                 }
             })
             .catch((error) => {
@@ -223,7 +242,7 @@ const SubCategory = () => {
                                         <div className="listing-normal">
                                             <div className="listing-normal text-center">
                                                 <DropdownButton className="icon-three-dot manage-three-dot">
-                                                    <Dropdown.Item onClick={() => fetchSubCategories(cat._id)}> Edit</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => {fetchSubCategories(cat._id)}}> Edit</Dropdown.Item>
                                                     {/* <Dropdown.Item onClick={() => setSelectedItemId(cat._id)}> Edit</Dropdown.Item> */}
                                                     <Dropdown.Item onClick={() =>
                                                         setSelectedItemId(cat._id)
@@ -241,7 +260,7 @@ const SubCategory = () => {
             </div>
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Category</Modal.Title>
+                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Sub Category</Modal.Title>
                     <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
                         resetFormData();
                         handleClose();
@@ -309,7 +328,7 @@ const SubCategory = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" value={formData.logo} name='logo' onChange={handleInputChange} />
+                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={handleInputChange} />
                                 </Form.Group>
                             </Col>
                         </Row>

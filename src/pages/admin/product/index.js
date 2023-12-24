@@ -37,7 +37,7 @@ const Product = () => {
             deleteData(`/product/${selectedItemId}`)
                 .then(() => {
                     setSelectedItemId(null);
-                    fetchSubCategories();
+                    fetchProduct();
                 })
                 .catch((error) => {
                     setSelectedItemId(null);
@@ -58,6 +58,7 @@ const Product = () => {
             totalPrice: '',
             discountPrice: '',
             shippingCost: '',
+            status: '',
         });
     }
 
@@ -104,12 +105,12 @@ const Product = () => {
                 .catch((error) => {
                     console.error(error);
                 });
-        }
+            }
     };
 
     // id = null means all category else selected id category
     const fetchSubCategories = (id = '') => {
-        const routeName = id === '' ? '/subCategories' : `/subCategories/${id}`;
+        const routeName = "/subCategories";
         fetchData(routeName)
             .then((result) => {
                 if (id === '') {
@@ -132,10 +133,32 @@ const Product = () => {
     }
 
     const fetchProduct = (id = '') => {
-        fetchData("/product")
+        console.log("scsvsv ", id);
+        const routeName = formData.id === '' ? '/product' : `/product/${id}`;
+        fetchData(routeName)
             .then((result) => {
-                setProduct(result);
-                console.log("Product", result);
+                if (id === '') {
+                    setProduct(result);
+                    console.log("Product", result);
+                }
+                else {
+                    setFormData({
+                        id: result._id,
+                        categoryId: result.categoryId,
+                        subCategoryId: result.subCategoryId,
+                        productName: result.productName,
+                        productImage: result.productImage,
+                        thumbnailImage: result.thumbnailImage,
+                        unit: result.unit,
+                        totalPrice: result.totalPrice,
+                        discountPrice: result.discountPrice,
+                        shippingCost: result.shippingCost,
+                        description: result.description,
+                        status: result.status,
+                    });
+                    console.log("updateupdateupdateupdateupdateupdateupdate", formData);
+                    handleShow();
+                }
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -145,9 +168,9 @@ const Product = () => {
     // for fetch the data
     useEffect(() => {
         // Call the fetchData function
+        fetchProduct();
         fetchSubCategories();
         fetchCategories();
-        fetchProduct();
     }, []);
 
     return (
@@ -226,7 +249,7 @@ const Product = () => {
                                             <div className="listing-normal">
                                                 <div className="listing-normal text-center">
                                                     <DropdownButton className="icon-three-dot manage-three-dot">
-                                                        <Dropdown.Item onClick={() => fetchSubCategories(item._id)}> Edit</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() => fetchProduct(item._id)}> Edit</Dropdown.Item>
                                                         <Dropdown.Item onClick={() =>
                                                             setSelectedItemId(item._id)
                                                         }>Delete</Dropdown.Item>

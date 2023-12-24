@@ -13,7 +13,7 @@ export const fetchData = async (endpoint) => {
 
 export const postData = async (endpoint, data, headers) => {
   try {
-    const response = await axios.post(baseURL+endpoint, data, headers);
+    const response = await axios.post(baseURL+endpoint, data, { 'Content-Type': 'application/json' });
     return response.data;
   } catch (error) {
     throw error;

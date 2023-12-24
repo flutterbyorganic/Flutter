@@ -5,7 +5,7 @@ import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const Category = () => {
-    const [value, setValue] = useState("");
+    const [image, setImage] = useState("");
     const inputRef = useRef();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -56,7 +56,7 @@ const Category = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         // console.log('vaaa', e.target, e.target.value)
-        setValue(inputRef.current.value);
+        setImage(inputRef.current.value);
         console.log("valuevalue ", value)
         setFormData(pre => ({ ...pre, [name]: value}));
         // if(name === 'logo') {
@@ -64,7 +64,7 @@ const Category = () => {
         //   setFormData(pre => ({ ...pre, [name]: file}))
         //   setFormData({...formData, [name]: file});
         // }
-        console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
+        // console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
         setFormData(pre => ({ ...pre, [name]: value}))
     };
 
@@ -286,7 +286,7 @@ const Category = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" ref={inputRef} value={value} name='logo' onChange={handleInputChange} />
+                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={handleInputChange} />
                                 </Form.Group>
                             </Col>
                         </Row>

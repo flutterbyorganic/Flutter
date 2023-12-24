@@ -1,6 +1,9 @@
 import { Container, Image, Row, Nav, Button, Col, ListGroup, NavLink } from 'react-bootstrap';
 import React, { useState } from 'react';
+import Slider from 'react-slick';
 // import './assests/scss/main.scss';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import searchIcon from '../assests/img/search-icon.svg';
 import banner from '../assests/img/pic1.webp';
 import bagIcon from '../assests/img/bag.png';
@@ -15,13 +18,51 @@ import TopHeader from './topHeader';
 import Header from './header';
 import Footer from './footer';
 import Bestsellers from './bestSeller';
+import seller from '../assests/img/seller.png';
+import seller2 from '../assests/img/seller2.png';
+import seller3 from '../assests/img/seller3.png';
+import ExtraProduct from './extraproduct';
 
-  const Home = () => {
+const Home = () => {
 
   const [show, setShow] = useState(false);
 
   const searchClose = () => setShow(false);
   const searchShow = () => setShow(true);
+
+  const settings1 = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
   return (
     <>
@@ -32,16 +73,30 @@ import Bestsellers from './bestSeller';
       {/* main section  */}
       <div className="main-section">
         <div className="main-pc">
-          <Image src={banner} alt="Banner icon" className="banner-sec w-100" />
-          <div className="on-banner">
+          {/* <Image src={banner} alt="Banner icon" className="banner-sec w-100" /> */}
+          {/* <div className="on-banner">
             <h1>Fragrances To Love</h1>
             <Button className="btn-primary active">Shop Now</Button>
+          </div> */}
+          <div className="main-slider">
+            <Slider {...settings1}>
+              <div className="slider-item">
+                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
+              </div>
+              <div className="slider-item">
+                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
+              </div>
+              <div className="slider-item">
+                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
+              </div>
+            </Slider>
           </div>
         </div>
       </div>
 
       {/* best seller  */}
       <Bestsellers />
+      <ExtraProduct />
 
       {/* find out more  */}
       <div className="find-out-more">
