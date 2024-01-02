@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Row, Dropdown, Button, Form, InputGroup, DropdownButton, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
@@ -7,14 +7,16 @@ import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const AddBanner = () => {
+    const [image, setImage] = useState("");
+    const inputRef = useRef();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
     const [subCategory, setSubCategory] = useState(null);
-    const [product, setProduct] = useState(null);
+    const [banner, setBanner] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
     const [formData, setFormData] = useState({
-        id: '',
         bannerImage: '',
         heading: '',
         categoryId: '',
@@ -30,7 +32,7 @@ const AddBanner = () => {
     // for fetch the data
     useEffect(() => {
         if (selectedItemId) {
-            deleteData(`/product/${selectedItemId}`)
+            deleteData(`/banners/${selectedItemId}`)
                 .then(() => {
                     setSelectedItemId(null);
                     fetchBanner();
@@ -57,6 +59,7 @@ const AddBanner = () => {
 
 
     const apiRefresh = () => {
+        fetchBanner();
         fetchSubCategories();
         handleClose();
     }
@@ -64,28 +67,25 @@ const AddBanner = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('vaaa', e.target, e.target.value)
-        if (name === 'logo') {
-            let file = e.target.files[0]
-            setFormData(pre => ({ ...pre, [name]: file }))
+        setImage(inputRef.current.value);
+        if (name === 'bannerImage') {
+            let file = e.target.files[0];
+            setFormData(pre => ({ ...pre, [name]: file }));
+            setFormData({ ...formData, [name]: file });
         }
-        formData.categoryId = e.target.value;
-        const abcd = formData.subCategoryId = e.target.value;
-        console.log("abcd abcd ", abcd);
-
+        console.log({[name]: value}, '[name]: value[name]: value');
         setFormData(pre => ({ ...pre, [name]: value }));
+        console.log('sdsdfsd', formData);
     };
-
 
     const handlePostData = (e) => {
         e.preventDefault();
-        console.log("before create banner formData value : ", formData);
-        const routeName = formData.id === '' ? '/banners' : `/banners/${formData.id}`;
-        if (formData.id === '') {
-            delete formData.id;
-            postData(routeName, formData, { accept: 'application/json' })
+        console.log("Banner data ", formData.id);
+        const routeName = !isEdit ? '/banners' : `/banners/${formData.id}`;
+        if (!isEdit) {
+            postData(routeName, formData)
                 .then((result) => {
-                    console.log('banners data post successfully:', result);
+                    console.log('Banner data post successfully:', result);
                     resetFormData();
                     apiRefresh();
                     console.log("formData.logo ", formData);
@@ -97,7 +97,7 @@ const AddBanner = () => {
         else {
             updateData(routeName, formData)
                 .then((result) => {
-                    console.log('banners data edit successfully:', result);
+                    console.log('Banner data edit successfully:', result);
                     resetFormData();
                     apiRefresh();
                 })
@@ -121,6 +121,29 @@ const AddBanner = () => {
             });
     }
 
+    // const fetchSubCategories = async (id) => {
+    //     const routeName = "/subCategories";
+    //     try {
+    //         const subCategoryData = fetchData(routeName);
+    //             if (id) {
+    //                 setSubCategory(subCategoryData);
+    //             }
+    //     }
+    //     catch(err) {
+    //         console.error('Error sub category fetching data:', err);
+    //     }
+    // }
+
+    // const fetchCategories = async (id) => {
+    //     const routeName = "/subCategories";
+    //     try {
+    //         const categoryData = fetchData(routeName);
+    //         setCategory(categoryData);
+    //     } catch(err) {
+    //         console.error('Error category fetching data:', err);
+    //     }
+    // }
+
     const fetchCategories = (id = '') => {
         fetchData("/categories")
             .then((result) => {
@@ -131,32 +154,61 @@ const AddBanner = () => {
             });
     }
 
-    const fetchBanner = (id = '') => {
-        console.log("scsvsv ", id);
-        const routeName = formData.id === '' ? '/banners' : `/banners/${id}`;
-        fetchData(routeName)
-            .then((result) => {
-                if (id === '') {
-                    setProduct(result);
-                    console.log("Banner", result);
-                }
-                else {
-                    setFormData({
-                        id: result._id,
-                        categoryId: result.categoryId,
-                        subCategoryId: result.subCategoryId,
-                        bannerImage: result.bannerImage,
-                        heading: result.heading,
-                        subheading: result.subheading,
-                        ctaButton: result.ctaButton,
-                        status: result,
-                    });
-                    handleShow();
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    // const fetchBanner = (id) => {
+    //     console.log("scsvsv ", id);
+    //     const routeName = formData.id ? `/banners/${id}` : '/banners';
+    //     fetchData(routeName)
+    //         .then((result) => {
+    //             if (id) {
+    //                 setProduct(result);
+    //                 console.log("Banner", result);
+    //             }
+    //             else {
+    //                 setFormData({
+    //                     id: result._id,
+    //                     categoryId: result.categoryId,
+    //                     subCategoryId: result.subCategoryId,
+    //                     bannerImage: result.bannerImage,
+    //                     heading: result.heading,
+    //                     subheading: result.subheading,
+    //                     ctaButton: result.ctaButton,
+    //                     status: result
+    //                 });
+    //                 handleShow();
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }
+
+    const fetchBanner = async (id) => {
+        console.log("call edit function ", id);
+        const routeName = id ? `/banners/${id}` : '/banners';
+        console.log("call routeName ", routeName);
+        try {
+            const bannerData = await fetchData(routeName)
+            if (id) {
+                console.log("inner fetch banner ");
+                setFormData({
+                    id: bannerData._id,
+                    categoryId: bannerData.categoryId,
+                    subCategoryId: bannerData.subCategoryId,
+                    bannerImage: bannerData.bannerImage,
+                    heading: bannerData.heading,
+                    subheading: bannerData.subheading,
+                    ctaButton: bannerData.ctaButton,
+                    status: bannerData
+                });
+                setIsEdit(true);
+                handleShow();
+            } else {
+                setBanner(bannerData);
+                setIsEdit(false);
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
     }
 
     // for fetch the data
@@ -230,7 +282,7 @@ const AddBanner = () => {
                             </div>
                         </div>
                         <div className="tbody">
-                            {product?.map((item, index) => (
+                            {banner?.map((item, index) => (
                                 <div className="row tr" key={index + 1}>
                                     <div className="td flex-table-column-25">
                                         <p className="listing-title text-capitalize">{item.heading}</p>
@@ -307,7 +359,8 @@ const AddBanner = () => {
                                     <Form.Label>Banner Image</Form.Label>
                                     <Form.Control
                                         type="file"
-                                        value={formData.bannerImage}
+                                        ref={inputRef}
+                                        value={image}
                                         name='bannerImage'
                                         onChange={handleInputChange}
                                     />
@@ -363,8 +416,8 @@ const AddBanner = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>

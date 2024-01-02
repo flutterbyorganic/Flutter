@@ -40,7 +40,7 @@ var fetchData = function fetchData(endpoint) {
 
 exports.fetchData = fetchData;
 
-var postData = function postData(endpoint, data, headers) {
+var postData = function postData(endpoint, data) {
   var response;
   return regeneratorRuntime.async(function postData$(_context2) {
     while (1) {
@@ -48,9 +48,7 @@ var postData = function postData(endpoint, data, headers) {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return regeneratorRuntime.awrap(_axios["default"].post(baseURL + endpoint, data, {
-            'Content-Type': 'application/json'
-          }));
+          return regeneratorRuntime.awrap(_axios["default"].post(baseURL + endpoint, data));
 
         case 3:
           response = _context2.sent;

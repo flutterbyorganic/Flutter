@@ -14,8 +14,8 @@ const SubCategory = () => {
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
     const [subCategory, setSubCategory] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
     const [formData, setFormData] = useState({
-        id: '',
         categoryId: '',
         name: '',
         priority: '',
@@ -43,7 +43,6 @@ const SubCategory = () => {
 
     const resetFormData = () => {
         setFormData({
-            id: '',
             categoryId: '',
             name: '',
             priority: '',
@@ -60,25 +59,21 @@ const SubCategory = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        // console.log('vaaa', e.target, e.target.value)
         setImage(inputRef.current.value);
-        console.log("valuevalue ", value);
-        setFormData(pre => ({ ...pre, [name]: value}));
-        // if(name === 'logo') {
-        //   let file = e.target.files[0];
-        //   setFormData(pre => ({ ...pre, [name]: file}))
-        //   setFormData({...formData, [name]: file});
-        // }
-        // console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
-        setFormData(pre => ({ ...pre, [name]: value}));
+        if (name === 'logo') {
+            let file = e.target.files[0];
+            setFormData(pre => ({ ...pre, [name]: file }));
+            setFormData({ ...formData, [name]: file });
+        }
+        setFormData(pre => ({ ...pre, [name]: value }));
     };
 
 
     const handlePostData = (e) => {
         e.preventDefault();
-        console.log("subcategory data ", formData);
-        const routeName = formData.id === '' ? '/subCategories' : `/subCategories/${formData.id}`;
-        if (formData.id === '') {
+        console.log("subcategory data ", formData.id);
+        const routeName = !isEdit ? '/subCategories' : `/subCategories/${formData.id}`;
+        if (!isEdit) {
             postData(routeName, formData, { accept: 'application/json' })
                 .then((result) => {
                     console.log('Sub category data post successfully:', result);
@@ -104,30 +99,28 @@ const SubCategory = () => {
     };
 
     // id = null means all category else selected id category
-    const fetchSubCategories = (id = '') => {
-        console.log("call edit function ", id);
-        const routeName = id === '' ? '/subCategories' : `/subCategories/${id}`;
-        fetchData(routeName)
-            .then((result) => {
-                if (id === '') {
-                    setSubCategory(result);
-                }
-                else {
-                    setFormData({
-                        id: result._id,
-                        categoryId: result.categoryId,
-                        name: result.name,
-                        priority: result.priority.toString(), // Convert to string if needed
-                        status: result.status,
-                        logo: result.logo,
-                    });
-                    console.log("formDataformDataformDataformDataformDataformData", formData);
-                    handleShow();
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    const fetchSubCategories = async (id) => {
+        const routeName = id ? `/subCategories/${id}` : '/subCategories';
+        try {
+            const categoryData = await fetchData(routeName)
+            if (id) {
+                setFormData({
+                    id: categoryData._id,
+                    categoryId: categoryData.categoryId,
+                    name: categoryData.name,
+                    priority: categoryData.priority.toString(), // Convert to string if needed
+                    status: categoryData.status,
+                    logo: categoryData.logo,
+                });
+                setIsEdit(true)
+                handleShow();
+            } else {
+                setSubCategory(categoryData);
+                setIsEdit(false)
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
     }
 
     const fetchCategories = (id = '') => {
@@ -242,8 +235,7 @@ const SubCategory = () => {
                                         <div className="listing-normal">
                                             <div className="listing-normal text-center">
                                                 <DropdownButton className="icon-three-dot manage-three-dot">
-                                                    <Dropdown.Item onClick={() => {fetchSubCategories(cat._id)}}> Edit</Dropdown.Item>
-                                                    {/* <Dropdown.Item onClick={() => setSelectedItemId(cat._id)}> Edit</Dropdown.Item> */}
+                                                    <Dropdown.Item onClick={() => { fetchSubCategories(cat._id) }}> Edit</Dropdown.Item>
                                                     <Dropdown.Item onClick={() =>
                                                         setSelectedItemId(cat._id)
                                                     }>Delete</Dropdown.Item>
@@ -319,8 +311,8 @@ const SubCategory = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>

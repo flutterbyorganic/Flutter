@@ -11,8 +11,8 @@ const Category = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
     const [formData, setFormData] = useState({
-        id: '',
         name: '',
         priority: '',
         status: '',
@@ -39,7 +39,6 @@ const Category = () => {
 
     const resetFormData = () => {
         setFormData({
-            id: '',
             name: '',
             priority: '',
             status: '',
@@ -55,31 +54,57 @@ const Category = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        // console.log('vaaa', e.target, e.target.value)
         setImage(inputRef.current.value);
-        console.log("valuevalue ", value)
+        if (name === 'logo') {
+            let file = e.target.files[0];
+            setFormData(pre => ({ ...pre, [name]: file }));
+            setFormData({ ...formData, [name]: file });
+        }
         setFormData(pre => ({ ...pre, [name]: value}));
-        // if(name === 'logo') {
-        //   let file = e.target.files[0];
-        //   setFormData(pre => ({ ...pre, [name]: file}))
-        //   setFormData({...formData, [name]: file});
-        // }
-        // console.log('{ ...pre, [name]: value}', { ...formData, [name]: value})
-        setFormData(pre => ({ ...pre, [name]: value}))
     };
 
 
+    // const handlePostData = (e) => {
+    //     e.preventDefault();
+    //     console.log("formDataformData ", formData);
+    //     const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
+    //     if (formData.id === '') {
+    //         delete formData.id;
+    //         postData(routeName, formData, { accept: 'application/json' })
+    //             .then((result) => {
+    //                 console.log('Data posted successfully:', result);
+    //                 resetFormData();
+    //                 apiRefresh();
+    //                 console.log("formData.logo categoriesssss ", formData);
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //             });
+    //     }
+    //     else {
+    //         updateData(routeName, formData)
+    //             .then((result) => {
+    //                 console.log('Edit successfully:', result);
+    //                 console.log("Edit categoriesssss ", result.id);
+    //                 resetFormData();
+    //                 apiRefresh();
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //             });
+    //     }
+    // };
+
     const handlePostData = (e) => {
         e.preventDefault();
-        console.log("formDataformData ", formData);
-        const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
-        if (formData.id === '') {
-            postData(routeName, formData, { accept: 'application/json' })
+        console.log("subcategory data ", formData.id);
+        const routeName = !isEdit ? '/categories' : `/categories/${formData.id}`;
+        if (!isEdit) {
+            postData(routeName, formData)
                 .then((result) => {
-                    console.log('Data posted successfully:', result);
+                    console.log('Category data post successfully:', result);
                     resetFormData();
                     apiRefresh();
-                    console.log("formData.logo ", formData);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -88,7 +113,7 @@ const Category = () => {
         else {
             updateData(routeName, formData)
                 .then((result) => {
-                    console.log('Edit successfully:', result);
+                    console.log('Category data edit successfully:', result);
                     resetFormData();
                     apiRefresh();
                 })
@@ -99,29 +124,52 @@ const Category = () => {
     };
 
     // id = null means all category else selected id category
-    const fetchCategories = (id = '') => {
-        console.log("call edit function ", id);
-        const routeName = id === '' ? '/categories' : `/categories/${id}`;
-        fetchData(routeName)
-            .then((result) => {
-                if (id === '') {
-                    setCategory(result);
-                }
-                else {
-                    setFormData({
-                        id: result._id,
-                        name: result.name,
-                        priority: result.priority.toString(), // Convert to string if needed
-                        status: result.status,
-                        logo: result.logo,
-                    });
-                    console.log("formDataformDataformDataformDataformDataformData", formData);
-                    handleShow();
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    // const fetchCategories = (id = '') => {
+    //     console.log("call edit function ", id);
+    //     const routeName = id === '' ? '/categories' : `/categories/${id}`;
+    //     fetchData(routeName)
+    //         .then((result) => {
+    //             if (id === '') {
+    //                 setCategory(result);
+    //             }
+    //             else {
+    //                 setFormData({
+    //                     id: result._id,
+    //                     name: result.name,
+    //                     priority: result.priority.toString(),
+    //                     status: result.status,
+    //                     logo: result.logo,
+    //                 });
+    //                 console.log("formDataformDataformDataformDataformDataformData", formData);
+    //                 handleShow();
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }
+
+    const fetchCategories = async (id) => {
+        const routeName = id ? `/categories/${id}` : '/categories';
+        try {
+            const categoryData = await fetchData(routeName)
+            if (id) {
+                setFormData({
+                id: categoryData._id,
+                name: categoryData.name,
+                priority: categoryData.priority.toString(), // Convert to string if needed
+                status: categoryData.status,
+                logo: categoryData.logo,
+                });
+                setIsEdit(true)
+                handleShow();
+            } else {
+                setCategory(categoryData);
+                setIsEdit(false)
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
     }
 
     // for fetch the data
@@ -277,8 +325,8 @@ const Category = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>

@@ -84,6 +84,7 @@ const Product = () => {
         console.log("product data ", formData);
         const routeName = formData.id === '' ? '/product' : `/product/${formData.id}`;
         if (formData.id === '') {
+            delete formData.id;
             postData(routeName, formData, { accept: 'application/json' })
                 .then((result) => {
                     console.log('product data post successfully:', result);
@@ -390,8 +391,8 @@ const Product = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>
