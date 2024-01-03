@@ -67,16 +67,28 @@ const AddBanner = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setImage(inputRef.current.value);
-        if (name === 'bannerImage') {
-            let file = e.target.files[0];
-            setFormData(pre => ({ ...pre, [name]: file }));
-            setFormData({ ...formData, [name]: file });
-        }
         console.log({[name]: value}, '[name]: value[name]: value');
         setFormData(pre => ({ ...pre, [name]: value }));
         console.log('sdsdfsd', formData);
     };
+
+
+    // for uploading image
+    const UploadImage = (e) => {
+        setImage(inputRef.current.value);
+        let file = e.target.files[0];
+        const formDataFile = new FormData();
+        formDataFile.append("file", file);
+        postData("/fileUpload", formDataFile)
+        .then((result) => {
+            setFormData(pre => ({ ...pre, bannerImage: result.url }));
+            console.log('Uploading images successfully:', result.url);
+            // resetFormData();
+        })
+        .catch((error) => {
+            console.error("Uploading images into api");
+        });
+    }
 
     const handlePostData = (e) => {
         e.preventDefault();
@@ -121,29 +133,6 @@ const AddBanner = () => {
             });
     }
 
-    // const fetchSubCategories = async (id) => {
-    //     const routeName = "/subCategories";
-    //     try {
-    //         const subCategoryData = fetchData(routeName);
-    //             if (id) {
-    //                 setSubCategory(subCategoryData);
-    //             }
-    //     }
-    //     catch(err) {
-    //         console.error('Error sub category fetching data:', err);
-    //     }
-    // }
-
-    // const fetchCategories = async (id) => {
-    //     const routeName = "/subCategories";
-    //     try {
-    //         const categoryData = fetchData(routeName);
-    //         setCategory(categoryData);
-    //     } catch(err) {
-    //         console.error('Error category fetching data:', err);
-    //     }
-    // }
-
     const fetchCategories = (id = '') => {
         fetchData("/categories")
             .then((result) => {
@@ -153,34 +142,6 @@ const AddBanner = () => {
                 console.error('Error fetching data:', error);
             });
     }
-
-    // const fetchBanner = (id) => {
-    //     console.log("scsvsv ", id);
-    //     const routeName = formData.id ? `/banners/${id}` : '/banners';
-    //     fetchData(routeName)
-    //         .then((result) => {
-    //             if (id) {
-    //                 setProduct(result);
-    //                 console.log("Banner", result);
-    //             }
-    //             else {
-    //                 setFormData({
-    //                     id: result._id,
-    //                     categoryId: result.categoryId,
-    //                     subCategoryId: result.subCategoryId,
-    //                     bannerImage: result.bannerImage,
-    //                     heading: result.heading,
-    //                     subheading: result.subheading,
-    //                     ctaButton: result.ctaButton,
-    //                     status: result
-    //                 });
-    //                 handleShow();
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching data:', error);
-    //         });
-    // }
 
     const fetchBanner = async (id) => {
         console.log("call edit function ", id);
@@ -291,7 +252,9 @@ const AddBanner = () => {
                                         <p className="listing-title text-capitalize">{item.subheading}</p>
                                     </div>
                                     <div className="td flex-table-column-25">
-                                        <p className="listing-normal mb-0">{item.bannerImage}</p>
+                                        <p className="listing-normal mb-0">
+                                            <img src={item.bannerImage} alt="Banner pic" width="40" />
+                                        </p>
                                     </div>
                                     <div className="td flex-table-column-15">
                                         <div>
@@ -333,6 +296,7 @@ const AddBanner = () => {
                                     <Form.Label>Category</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.category} name="categoryId" onChange={handleInputChange}>
+                                            {!isEdit ? <option value="" default>Select Category</option> : ''}
                                             {category?.map((cat, index) => (
                                                 <option value={cat?._id} key={index + 1}>{cat?.name}</option>
                                             )
@@ -346,6 +310,7 @@ const AddBanner = () => {
                                     <Form.Label>SubCategory</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.subCategory} name="subCategoryId" onChange={handleInputChange}>
+                                            {!isEdit ? <option value="" default>Select Sub Category</option> : ''}
                                             {subCategory?.map((subCat, index) => (
                                                 <option value={subCat?._id} key={index + 1}>{subCat?.name}</option>
                                             )
@@ -360,9 +325,9 @@ const AddBanner = () => {
                                     <Form.Control
                                         type="file"
                                         ref={inputRef}
-                                        value={image}
+                                        value={formData.image}
                                         name='bannerImage'
-                                        onChange={handleInputChange}
+                                        onChange={UploadImage}
                                     />
                                 </Form.Group>
                             </Col>
@@ -416,6 +381,7 @@ const AddBanner = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
+                                            {!isEdit ? <option value="" default>Select Status</option> : ''}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </Form.Select>
