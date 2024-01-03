@@ -28,7 +28,7 @@ const Product = () => {
         totalPrice: 0,
         discountPrice: 0,
         shippingCost: 0,
-        status: 'option2',
+        status: '',
     });
 
     // for deleting the row
@@ -145,39 +145,6 @@ const Product = () => {
                 console.error('Error fetching data:', error);
             });
     }
-
-    // const fetchProduct = (id = '') => {
-    //     console.log("scsvsv ", id);
-    //     const routeName = formData.id === '' ? '/product' : `/product/${id}`;
-    //     fetchData(routeName)
-    //         .then((result) => {
-    //             if (id === '') {
-    //                 setProduct(result);
-    //                 console.log("Product", result);
-    //             }
-    //             else {
-    //                 setFormData({
-    //                     id: result._id,
-    //                     category: result.category,
-    //                     subCategory: result.subCategory,
-    //                     productName: result.productName,
-    //                     productImage: result.productImage,
-    //                     thumbnailImage: result.thumbnailImage,
-    //                     unit: result.unit,
-    //                     totalPrice: result.totalPrice,
-    //                     discountPrice: result.discountPrice,
-    //                     shippingCost: result.shippingCost,
-    //                     description: result.description,
-    //                     status: result.status,
-    //                 });
-    //                 console.log("updateupdateupdateupdateupdateupdateupdate", formData);
-    //                 handleShow();
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching data:', error);
-    //         });
-    // }
 
     const fetchProduct = async (id) => {
         console.log("call edit function ", id);

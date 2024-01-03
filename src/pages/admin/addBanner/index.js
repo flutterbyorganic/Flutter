@@ -23,7 +23,7 @@ const AddBanner = () => {
         subCategoryId: '',
         subheading: '',
         ctaButton: '',
-        status: 'option2',
+        status: '',
     });
 
     // for deleting the row
@@ -53,7 +53,6 @@ const AddBanner = () => {
             heading: '',
             subheading: '',
             ctaButton: '',
-            status: 'option2',
             status: '',
         });
     }
@@ -156,7 +155,7 @@ const AddBanner = () => {
                     heading: bannerData.heading,
                     subheading: bannerData.subheading,
                     ctaButton: bannerData.ctaButton,
-                    status: bannerData
+                    status: bannerData.status
                 });
                 setIsEdit(true);
                 handleShow();

@@ -19,7 +19,7 @@ const SubCategory = () => {
         categoryId: '',
         name: '',
         priority: '',
-        status: 'option2',
+        status: '',
         logo: '',
     });
 
@@ -322,6 +322,7 @@ const SubCategory = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
+                                            {!isEdit ? <option value="" default>Select Status</option> : ''}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </Form.Select>
