@@ -263,7 +263,7 @@ const SubCategory = () => {
             </div>
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Sub Category</Modal.Title>
+                    <Modal.Title>{isEdit ? 'Update' : 'Add'} Sub Category</Modal.Title>
                     <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
                         resetFormData();
                         handleClose();
@@ -336,7 +336,7 @@ const SubCategory = () => {
                             </Col>
                         </Row>
                         <div className="footer-modal">
-                            <Button type="submit" className="btn primary modal-btn-submit">{formData.id === '' ? 'Add' : 'Update'}</Button>
+                            <Button type="submit" className="btn primary modal-btn-submit">{isEdit ? 'Update' : 'Add'}</Button>
                         </div>
                     </Form>
                 </Modal.Body>

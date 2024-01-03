@@ -233,7 +233,7 @@ const Category = () => {
             </div >
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Category</Modal.Title>
+                    <Modal.Title>{isEdit ? 'Update' : 'Add'} Category</Modal.Title>
                     <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
                         resetFormData();
                         handleClose();
@@ -279,6 +279,7 @@ const Category = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
+                                        {!isEdit ? <option value="" default>Select Status</option> : ''}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </Form.Select>
@@ -293,7 +294,7 @@ const Category = () => {
                             </Col>
                         </Row>
                         <div className="footer-modal">
-                            <Button type="submit" className="btn primary modal-btn-submit">{formData.id === '' ? 'Add' : 'Update'} </Button>
+                            <Button type="submit" className="btn primary modal-btn-submit">{isEdit ? 'Update' : 'Add'} </Button>
                         </div>
                     </Form>
                 </Modal.Body>

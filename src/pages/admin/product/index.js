@@ -316,7 +316,7 @@ const Product = () => {
             </div>
             <Modal centered className="common-modal boarding-login" show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{formData.id === '' ? 'Add' : 'Edit'} Product</Modal.Title>
+                    <Modal.Title>{isEdit ? 'Update' : 'Add'} Product</Modal.Title>
                     <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
                         resetFormData();
                         handleClose();
@@ -466,7 +466,7 @@ const Product = () => {
                             </Col>
                         </Row>
                         <div className="footer-modal">
-                            <Button type="submit" className="btn primary modal-btn-submit">{formData.id === '' ? 'Add' : 'Edit'} Product</Button>
+                            <Button type="submit" className="btn primary modal-btn-submit">{isEdit ? 'Update' : 'Add'} Product</Button>
                         </div>
                     </Form>
                 </Modal.Body>
