@@ -5,7 +5,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import seller from '../../assests/img/seller.png';
+import seller from '../../assests/img/product1.png';
 import seller2 from '../../assests/img/seller2.png';
 import seller3 from '../../assests/img/seller3.png';
 import { fetchData } from "../../apis/api";
@@ -38,8 +38,8 @@ const Bestsellers = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
     responsive: [
       {
         breakpoint: 1024,
@@ -87,44 +87,72 @@ const Bestsellers = () => {
               <div className="slider-item">
                 <div className="slider-item-pic">
                   <Image src={seller} alt="Seller icon" />
+                  <span className="discount">50%</span>
                 </div>
-                <Nav.Link className="seller-title text-truncate">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
                 <div className="slider-item-wrap">
-                  <h5>$35</h5>
-                  <Nav.Link onClick={(e) =>
-                      dispatch(addItem({ name: name, price}))
-                    }>Add +</Nav.Link>
+                  <div className="product-price">
+                    <span className="sale-price">$129.00</span>
+                    <span className="offer-price">$99.00</span>
+                  </div>
                 </div>
-              </div>
-              <div className="slider-item">
-                <div className="slider-item-pic">
-                  <Image src={seller2} alt="Seller icon" />
-                </div>
-                <Nav.Link className="seller-title text-truncate">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
-                <div className="slider-item-wrap">
-                  <h5>$35</h5>
-                  <Nav.Link>Add +</Nav.Link>
-                </div>
-              </div>
-              <div className="slider-item">
-                <div className="slider-item-pic">
-                  <Image src={seller3} alt="Seller icon" />
-                </div>
-                <Nav.Link className="seller-title text-truncate">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
-                <div className="slider-item-wrap">
-                  <h5>$35</h5>
-                  <Nav.Link>Add +</Nav.Link>
-                </div>
+                <Nav.Link className="add-to-cart" onClick={(e) =>dispatch(addItem({ name: name, price}))}>Add to cart</Nav.Link>
               </div>
               <div className="slider-item">
                 <div className="slider-item-pic">
                   <Image src={seller} alt="Seller icon" />
+                  <span className="discount">50%</span>
                 </div>
-                <Nav.Link className="seller-title text-truncate">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
                 <div className="slider-item-wrap">
-                  <h5>$35</h5>
-                  <Nav.Link>Add +</Nav.Link>
+                  <div className="product-price">
+                    <span className="sale-price">$129.00</span>
+                    <span className="offer-price">$99.00</span>
+                  </div>
                 </div>
+                <Nav.Link className="add-to-cart" onClick={(e) =>dispatch(addItem({ name: name, price}))}>Add to cart</Nav.Link>
+              </div>
+              <div className="slider-item">
+                <div className="slider-item-pic">
+                  <Image src={seller} alt="Seller icon" />
+                  <span className="discount">50%</span>
+                </div>
+                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <div className="slider-item-wrap">
+                  <div className="product-price">
+                    <span className="sale-price">$129.00</span>
+                    <span className="offer-price">$99.00</span>
+                  </div>
+                </div>
+                <Nav.Link className="add-to-cart" onClick={(e) =>dispatch(addItem({ name: name, price}))}>Add to cart</Nav.Link>
+              </div>
+              <div className="slider-item">
+                <div className="slider-item-pic">
+                  <Image src={seller} alt="Seller icon" />
+                  <span className="discount">50%</span>
+                </div>
+                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <div className="slider-item-wrap">
+                  <div className="product-price">
+                    <span className="sale-price">$129.00</span>
+                    <span className="offer-price">$99.00</span>
+                  </div>
+                </div>
+                <Nav.Link className="add-to-cart" onClick={(e) =>dispatch(addItem({ name: name, price}))}>Add to cart</Nav.Link>
+              </div>
+              <div className="slider-item">
+                <div className="slider-item-pic">
+                  <Image src={seller} alt="Seller icon" />
+                  <span className="discount">50%</span>
+                </div>
+                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <div className="slider-item-wrap">
+                  <div className="product-price">
+                    <span className="sale-price">$129.00</span>
+                    <span className="offer-price">$99.00</span>
+                  </div>
+                </div>
+                <Nav.Link className="add-to-cart" onClick={(e) =>dispatch(addItem({ name: name, price}))}>Add to cart</Nav.Link>
               </div>
             </Slider>
 

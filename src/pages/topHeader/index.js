@@ -2,7 +2,7 @@ import { useState } from "react";
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Container, Image } from "react-bootstrap";
+import { Container, Image, Form, InputGroup } from "react-bootstrap";
 import searchIcon from '../../assests/img/search-icon.svg';
 import logoIcon from '../../assests/img/logo.jpeg';
 import storeIcon from '../../assests/img/store.png';
@@ -67,18 +67,22 @@ const TopHeader = () => {
           </div>
           <div className="main-header">
             <Container className='main-container'>
-              <div className="left-header">
-                <div className="header-search">
-                  <Image src={searchIcon} alt="Search icon" />
-                  <p>Search</p>
-                </div>
-                <div className="header-store">
-                  <Image src={storeIcon} alt="Store icon" />
-                  <p>Stores</p>
-                </div>
-              </div>
               <div className="middle-header">
                 <Image src={logoIcon} alt="Logo icon" />
+              </div>
+              <div className="left-header">
+                <div className="header-search">
+                  <InputGroup className="">
+                    <InputGroup.Text id="basic-addon1">
+                      <Image src={searchIcon} alt="Search" />
+                    </InputGroup.Text>
+                    <Form.Control
+                      placeholder="Search..."
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                    />
+                  </InputGroup>
+                </div>
               </div>
               <div className="right-header">
                 <div className="login">

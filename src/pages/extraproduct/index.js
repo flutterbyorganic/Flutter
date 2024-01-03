@@ -11,12 +11,12 @@ const ExtraProduct = () => {
     <>
 
       <Container className="best-slider">
-        <div className="header-title">
+        {/* <div className="header-title">
           <h1>Similar Product</h1>
-        </div>
+        </div> */}
 
         <div className="collection">
-          <Row className="collection-row">
+          {/* <Row className="collection-row">
             <Col xs={12} md={6} className="collection-left">
               <Image className="w-100" src={collection} alt="Collection Icon" />
               <div className="collection-wrap">
@@ -49,7 +49,7 @@ const ExtraProduct = () => {
                 <Button className="btn-secondary">Shop Now</Button>
               </div>
             </Col>
-          </Row>
+          </Row> */}
         </div>
       </Container>
     </>
