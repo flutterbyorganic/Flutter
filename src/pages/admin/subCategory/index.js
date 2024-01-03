@@ -173,7 +173,11 @@ const SubCategory = () => {
                             </Form>
                         </div>
                         <div className="header-right">
-                            <Button className="btn primary header-primary-btn" onClick={handleShow}>Add Sub Category</Button>
+                            <Button className="btn primary header-primary-btn" onClick={() => {
+                                setIsEdit(false);
+                                resetFormData();
+                                handleShow();
+                            }}>Add Sub Category</Button>
                         </div>
                     </div>
                 </div>

@@ -78,13 +78,13 @@ const AddBanner = () => {
         const formDataFile = new FormData();
         formDataFile.append("file", file);
         postData("/fileUpload", formDataFile)
-        .then((result) => {
-            setFormData(pre => ({ ...pre, bannerImage: result.url }));
-            console.log('Uploading images successfully:', result.url);
-        })
-        .catch((error) => {
-            console.error("Uploading images into api");
-        });
+            .then((result) => {
+                setFormData(pre => ({ ...pre, bannerImage: result.url }));
+                console.log('Uploading images successfully:', result.url);
+            })
+            .catch((error) => {
+                console.error("Uploading images into api");
+            });
     }
 
     const handlePostData = (e) => {
@@ -197,7 +197,11 @@ const AddBanner = () => {
                             </Form>
                         </div>
                         <div className="header-right">
-                            <Button className="btn primary header-primary-btn" onClick={handleShow}>Add Banner</Button>
+                            <Button className="btn primary header-primary-btn" onClick={() => {
+                                setIsEdit(false);
+                                resetFormData();
+                                handleShow();
+                            }}>Add Banner</Button>
                         </div>
                     </div>
                 </div>
@@ -280,7 +284,6 @@ const AddBanner = () => {
                 <Modal.Header>
                     <Modal.Title>{isEdit ? 'Update' : 'Add'} Banner</Modal.Title>
                     <img className="btn-close" src={closeIcon} alt="close icon" onClick={() => {
-                        resetFormData();
                         handleClose();
                     }} />
                 </Modal.Header>

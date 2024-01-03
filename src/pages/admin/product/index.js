@@ -210,7 +210,11 @@ const Product = () => {
                                 </Form>
                             </div>
                             <div className="header-right">
-                                <Button className="btn primary header-primary-btn" onClick={handleShow}>Add Product</Button>
+                                <Button className="btn primary header-primary-btn" onClick={() => {
+                                setIsEdit(false);
+                                resetFormData();
+                                handleShow();
+                            }}>Add Product</Button>
                             </div>
                         </div>
                     </div>
