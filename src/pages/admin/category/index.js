@@ -55,45 +55,25 @@ const Category = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setImage(inputRef.current.value);
-        if (name === 'logo') {
-            let file = e.target.files[0];
-            setFormData(pre => ({ ...pre, [name]: file }));
-            setFormData({ ...formData, [name]: file });
-        }
+        console.log({[name]: value}, '[name]: value[name]: value');
         setFormData(pre => ({ ...pre, [name]: value}));
     };
 
-
-    // const handlePostData = (e) => {
-    //     e.preventDefault();
-    //     console.log("formDataformData ", formData);
-    //     const routeName = formData.id === '' ? '/categories' : `/categories/${formData.id}`;
-    //     if (formData.id === '') {
-    //         delete formData.id;
-    //         postData(routeName, formData, { accept: 'application/json' })
-    //             .then((result) => {
-    //                 console.log('Data posted successfully:', result);
-    //                 resetFormData();
-    //                 apiRefresh();
-    //                 console.log("formData.logo categoriesssss ", formData);
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //             });
-    //     }
-    //     else {
-    //         updateData(routeName, formData)
-    //             .then((result) => {
-    //                 console.log('Edit successfully:', result);
-    //                 console.log("Edit categoriesssss ", result.id);
-    //                 resetFormData();
-    //                 apiRefresh();
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //             });
-    //     }
-    // };
+    // for uploading image
+    const UploadImage = (e) => {
+        setImage(inputRef.current.value);
+        let file = e.target.files[0];
+        const formDataFile = new FormData();
+        formDataFile.append("file", file);
+        postData("/fileUpload", formDataFile)
+        .then((result) => {
+            setFormData(pre => ({ ...pre, logo: result.url }));
+            console.log('Uploading images successfully:', result.url);
+        })
+        .catch((error) => {
+            console.error("Uploading images into api");
+        });
+    }
 
     const handlePostData = (e) => {
         e.preventDefault();
@@ -122,32 +102,6 @@ const Category = () => {
                 });
         }
     };
-
-    // id = null means all category else selected id category
-    // const fetchCategories = (id = '') => {
-    //     console.log("call edit function ", id);
-    //     const routeName = id === '' ? '/categories' : `/categories/${id}`;
-    //     fetchData(routeName)
-    //         .then((result) => {
-    //             if (id === '') {
-    //                 setCategory(result);
-    //             }
-    //             else {
-    //                 setFormData({
-    //                     id: result._id,
-    //                     name: result.name,
-    //                     priority: result.priority.toString(),
-    //                     status: result.status,
-    //                     logo: result.logo,
-    //                 });
-    //                 console.log("formDataformDataformDataformDataformDataformData", formData);
-    //                 handleShow();
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching data:', error);
-    //         });
-    // }
 
     const fetchCategories = async (id) => {
         const routeName = id ? `/categories/${id}` : '/categories';
@@ -334,7 +288,7 @@ const Category = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={handleInputChange} />
+                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} />
                                 </Form.Group>
                             </Col>
                         </Row>

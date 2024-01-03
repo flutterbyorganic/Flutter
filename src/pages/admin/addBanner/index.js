@@ -32,6 +32,7 @@ const AddBanner = () => {
     // for fetch the data
     useEffect(() => {
         if (selectedItemId) {
+            console.log("delete call", selectedItemId);
             deleteData(`/banners/${selectedItemId}`)
                 .then(() => {
                     setSelectedItemId(null);
@@ -67,11 +68,9 @@ const AddBanner = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log({[name]: value}, '[name]: value[name]: value');
         setFormData(pre => ({ ...pre, [name]: value }));
         console.log('sdsdfsd', formData);
     };
-
 
     // for uploading image
     const UploadImage = (e) => {
@@ -83,7 +82,6 @@ const AddBanner = () => {
         .then((result) => {
             setFormData(pre => ({ ...pre, bannerImage: result.url }));
             console.log('Uploading images successfully:', result.url);
-            // resetFormData();
         })
         .catch((error) => {
             console.error("Uploading images into api");
@@ -150,7 +148,6 @@ const AddBanner = () => {
         try {
             const bannerData = await fetchData(routeName)
             if (id) {
-                console.log("inner fetch banner ");
                 setFormData({
                     id: bannerData._id,
                     categoryId: bannerData.categoryId,

@@ -60,13 +60,24 @@ const SubCategory = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setImage(inputRef.current.value);
-        if (name === 'logo') {
-            let file = e.target.files[0];
-            setFormData(pre => ({ ...pre, [name]: file }));
-            setFormData({ ...formData, [name]: file });
-        }
         setFormData(pre => ({ ...pre, [name]: value }));
     };
+
+    // for uploading image
+    const UploadImage = (e) => {
+        setImage(inputRef.current.value);
+        let file = e.target.files[0];
+        const formDataFile = new FormData();
+        formDataFile.append("file", file);
+        postData("/fileUpload", formDataFile)
+        .then((result) => {
+            setFormData(pre => ({ ...pre, logo: result.url }));
+            console.log('Uploading images successfully:', result.url);
+        })
+        .catch((error) => {
+            console.error("Uploading images into api");
+        });
+    }
 
 
     const handlePostData = (e) => {
@@ -320,7 +331,7 @@ const SubCategory = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={handleInputChange} />
+                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} />
                                 </Form.Group>
                             </Col>
                         </Row>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Row, Dropdown, Button, Form, InputGroup, DropdownButton, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
@@ -7,18 +7,21 @@ import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 
 const Product = () => {
+    const [image, setImage] = useState("");
+    const [image2, setImage2] = useState("");
+    const inputRef = useRef();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
     const [subCategory, setSubCategory] = useState(null);
     const [product, setProduct] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
     const [formData, setFormData] = useState({
-        id: '',
         productName: '',
         description: '',
-        categoryId: '',
-        subCategoryId: '',
+        category: '',
+        subCategory: '',
         productImage: '',
         thumbnailImage: '',
         unit: '',
@@ -50,8 +53,8 @@ const Product = () => {
         setFormData({
             productName: '',
             description: '',
-            categoryId: '',
-            subCategoryId: '',
+            category: '',
+            subCategory: '',
             productImage: '',
             thumbnailImage: '',
             unit: '',
@@ -70,27 +73,37 @@ const Product = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('vaaa', e.target, e.target.value)
-        if (name === 'logo') {
-            let file = e.target.files[0]
-            setFormData(pre => ({ ...pre, [name]: file }))
-        }
-        setFormData(pre => ({ ...pre, [name]: value }))
+        setFormData(pre => ({ ...pre, [name]: value }));
+        console.log('sdsdfsd', formData);
     };
 
+    // for uploading image
+    const UploadImage = (e) => {
+        setImage(inputRef.current.value);
+        let file = e.target.files[0];
+        const formDataFile = new FormData();
+        formDataFile.append("file", file);
+        postData("/fileUpload", formDataFile)
+        .then((result) => {
+            setFormData(pre => ({ ...pre, productImage: result.url }));
+            setFormData(pre => ({ ...pre, thumbnailImage: result.url }));
+            console.log('Uploading images successfully:', result.url);
+        })
+        .catch((error) => {
+            console.error("Uploading images into api");
+        });
+    }
 
     const handlePostData = (e) => {
         e.preventDefault();
-        console.log("product data ", formData);
-        const routeName = formData.id === '' ? '/product' : `/product/${formData.id}`;
-        if (formData.id === '') {
-            delete formData.id;
-            postData(routeName, formData, { accept: 'application/json' })
+        console.log("subcategory data ", formData.id);
+        const routeName = !isEdit ? '/product' : `/product/${formData.id}`;
+        if (!isEdit) {
+            postData(routeName, formData)
                 .then((result) => {
-                    console.log('product data post successfully:', result);
+                    console.log('Product added successfully:', result);
                     resetFormData();
                     apiRefresh();
-                    console.log("formData.logo ", formData);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -99,14 +112,14 @@ const Product = () => {
         else {
             updateData(routeName, formData)
                 .then((result) => {
-                    console.log('product data edit successfully:', result);
+                    console.log('Product edited successfully:', result);
                     resetFormData();
                     apiRefresh();
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-            }
+        }
     };
 
     // id = null means all category else selected id category
@@ -133,38 +146,72 @@ const Product = () => {
             });
     }
 
-    const fetchProduct = (id = '') => {
-        console.log("scsvsv ", id);
-        const routeName = formData.id === '' ? '/product' : `/product/${id}`;
-        fetchData(routeName)
-            .then((result) => {
-                if (id === '') {
-                    setProduct(result);
-                    console.log("Product", result);
-                }
-                else {
-                    setFormData({
-                        id: result._id,
-                        categoryId: result.categoryId,
-                        subCategoryId: result.subCategoryId,
-                        productName: result.productName,
-                        productImage: result.productImage,
-                        thumbnailImage: result.thumbnailImage,
-                        unit: result.unit,
-                        totalPrice: result.totalPrice,
-                        discountPrice: result.discountPrice,
-                        shippingCost: result.shippingCost,
-                        description: result.description,
-                        status: result.status,
-                    });
-                    console.log("updateupdateupdateupdateupdateupdateupdate", formData);
-                    handleShow();
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    // const fetchProduct = (id = '') => {
+    //     console.log("scsvsv ", id);
+    //     const routeName = formData.id === '' ? '/product' : `/product/${id}`;
+    //     fetchData(routeName)
+    //         .then((result) => {
+    //             if (id === '') {
+    //                 setProduct(result);
+    //                 console.log("Product", result);
+    //             }
+    //             else {
+    //                 setFormData({
+    //                     id: result._id,
+    //                     category: result.category,
+    //                     subCategory: result.subCategory,
+    //                     productName: result.productName,
+    //                     productImage: result.productImage,
+    //                     thumbnailImage: result.thumbnailImage,
+    //                     unit: result.unit,
+    //                     totalPrice: result.totalPrice,
+    //                     discountPrice: result.discountPrice,
+    //                     shippingCost: result.shippingCost,
+    //                     description: result.description,
+    //                     status: result.status,
+    //                 });
+    //                 console.log("updateupdateupdateupdateupdateupdateupdate", formData);
+    //                 handleShow();
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }
+
+    const fetchProduct = async (id) => {
+        console.log("call edit function ", id);
+        const routeName = id ? `/product/${id}` : '/product';
+        console.log("call routeName ", routeName);
+        try {
+            console.log("inner fetch banner ");
+            const productData = await fetchData(routeName)
+            if (id) {
+                setFormData({
+                    id: productData._id,
+                    category: productData.category,
+                    subCategory: productData.subCategory,
+                    productName: productData.productName,
+                    productImage: productData.productImage,
+                    thumbnailImage: productData.thumbnailImage,
+                    unit: productData.unit,
+                    totalPrice: productData.totalPrice,
+                    discountPrice: productData.discountPrice,
+                    shippingCost: productData.shippingCost,
+                    description: productData.description,
+                    status: productData.status,
+                });
+                setIsEdit(true);
+                handleShow();
+            } else {
+                setProduct(productData);
+                setIsEdit(false);
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
     }
+
 
     // for fetch the data
     useEffect(() => {
@@ -244,7 +291,8 @@ const Product = () => {
                                             </div>
                                         </div>
                                         <div className="td flex-table-column-35">
-                                            <p className="listing-normal mb-0">{item.description}</p>
+                                            <img src={item.productImage} alt="Product images" width="50px" style={{marginRight: 10}} />
+                                            <img src={item.thumbnailImage} alt="Product images" width="50px" />
                                         </div>
                                         <div className="td flex-table-column-15">
                                             <div className="listing-normal">
@@ -293,7 +341,8 @@ const Product = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Label>Category</Form.Label>
                                 <Form.Group className="form-mt-space">
-                                    <Form.Select value={formData.category} name="categoryId" onChange={handleInputChange}>
+                                    <Form.Select value={formData.category} name="category" onChange={handleInputChange}>
+                                        {!isEdit ? <option value="" default>Select Category</option> : ''}
                                         {category?.map((cat, index) => (
                                             <option value={cat?._id} key={index + 1}>{cat?.name}</option>
                                         )
@@ -304,7 +353,8 @@ const Product = () => {
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Label>Sub-Category</Form.Label>
                                 <Form.Group className="form-mt-space">
-                                    <Form.Select value={formData.subCategory} name="subCategoryId" onChange={handleInputChange}>
+                                    <Form.Select value={formData.subCategory} name="subCategory" onChange={handleInputChange}>
+                                    {!isEdit ? <option value="" default>Select Sub Category</option> : ''}
                                         {subCategory?.map((subCat, index) => (
                                             <option value={subCat?._id} key={index + 1}>{subCat?.name}</option>
                                         )
@@ -317,9 +367,10 @@ const Product = () => {
                                     <Form.Label>Product Image</Form.Label>
                                     <Form.Control
                                         type="file"
-                                        value={formData.productImage}
+                                        ref={inputRef}
+                                        value={formData.image}
                                         name='productImage'
-                                        onChange={handleInputChange}
+                                        onChange={UploadImage}
                                     />
                                 </Form.Group>
                             </Col>
@@ -328,9 +379,10 @@ const Product = () => {
                                     <Form.Label>Thumbnail Image</Form.Label>
                                     <Form.Control
                                         type="file"
-                                        value={formData.thumbnailImage}
+                                        ref={inputRef}
+                                        value={formData.image}
                                         name='thumbnailImage'
-                                        onChange={handleInputChange}
+                                        onChange={UploadImage}
                                     />
                                 </Form.Group>
                             </Col>
@@ -391,6 +443,7 @@ const Product = () => {
                                     <Form.Label>Status</Form.Label>
                                     <Form.Group className="mb-3">
                                         <Form.Select value={formData.status} name="status" onChange={handleInputChange}>
+                                            {!isEdit ? <option value="" default>Select Status</option> : ''}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </Form.Select>
