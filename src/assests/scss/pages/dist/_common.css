@@ -21,14 +21,13 @@
   margin: 0;
   border-radius: 3px;
   border: 0;
-  background-color: rgba(255, 92, 57, 0);
   display: flex;
   justify-content: center;
   align-items: center;
   opacity: 1 !important;
   line-height: 0;
-  color: #fff !important;
-  fill: #fff;
+  color: #bca362 !important;
+  fill: #bca362;
   left: 20px;
 }
 .top-slider .slick-next::before {
@@ -43,7 +42,6 @@
   margin: 0;
   border-radius: 3px;
   border: 0;
-  background-color: rgba(255, 92, 57, 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -229,7 +227,7 @@
   fill: #fff;
   width: 50px;
   height: 50px;
-  background-color: #1A1A1A;
+  background-color: #bca362;
   border-radius: 50%;
   left: -30px;
   position: absolute;
@@ -247,7 +245,7 @@
   opacity: 1 !important;
   width: 50px;
   height: 50px;
-  background-color: #1A1A1A;
+  background-color: #bca362;
   border-radius: 50%;
   right: -30px;
 }
@@ -345,7 +343,7 @@
   opacity: 1 !important;
   width: 50px;
   height: 50px;
-  background-color: #1A1A1A;
+  background-color: #bca362;
   border-radius: 50%;
   left: 60px;
 }
@@ -362,7 +360,7 @@
   opacity: 1 !important;
   width: 50px;
   height: 50px;
-  background-color: #1A1A1A;
+  background-color: #bca362;
   border-radius: 50%;
   right: 40px;
 }
@@ -445,11 +443,13 @@
 
 .footer {
   padding: 40px 80px 30px 80px;
-  background: #1f1a18;
+  background: #5b5b5b;
   color: #fff;
 }
 .footer .footer1 h3 {
-  font-family: "Times New Roman", Times, serif;
+  font-family: sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 .footer .footer1 .list-group .list-group-item {
   color: #fff;
