@@ -5,6 +5,7 @@ import closeIcon from '../../../assests/icons/close.svg';
 import Sidebar from "../../sidebar";
 import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
+import CustomLoader from "../../customLoader/customLoader";
 
 const SubCategory = () => {
     const [image, setImage] = useState("");
@@ -15,6 +16,7 @@ const SubCategory = () => {
     const [category, setCategory] = useState(null);
     const [subCategory, setSubCategory] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         categoryId: '',
         name: '',
@@ -65,6 +67,7 @@ const SubCategory = () => {
 
     // for uploading image
     const UploadImage = (e) => {
+        setIsLoading(true);
         setImage(inputRef.current.value);
         let file = e.target.files[0];
         const formDataFile = new FormData();
@@ -72,10 +75,12 @@ const SubCategory = () => {
         postData("/fileUpload", formDataFile)
         .then((result) => {
             setFormData(pre => ({ ...pre, logo: result.url }));
+            setIsLoading(false);
             console.log('Uploading images successfully:', result.url);
         })
         .catch((error) => {
             console.error("Uploading images into api");
+            setIsLoading(false);
         });
     }
 
@@ -333,11 +338,12 @@ const SubCategory = () => {
                                     </Form.Group>
                                 </div>
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
                                     <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} />
                                 </Form.Group>
+                                {isLoading && <CustomLoader />}
                             </Col>
                         </Row>
                         <div className="footer-modal">

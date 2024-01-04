@@ -5,6 +5,7 @@ import closeIcon from '../../../assests/icons/close.svg';
 import Sidebar from "../../sidebar";
 import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
+import CustomLoader from "../../customLoader/customLoader";
 
 const Product = () => {
     const [image, setImage] = useState("");
@@ -17,6 +18,7 @@ const Product = () => {
     const [subCategory, setSubCategory] = useState(null);
     const [product, setProduct] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         productName: '',
         description: '',
@@ -79,6 +81,7 @@ const Product = () => {
 
     // for uploading image
     const UploadImage = (e) => {
+        setIsLoading(true);
         setImage(inputRef.current.value);
         let file = e.target.files[0];
         const formDataFile = new FormData();
@@ -87,10 +90,12 @@ const Product = () => {
         .then((result) => {
             setFormData(pre => ({ ...pre, productImage: result.url }));
             setFormData(pre => ({ ...pre, thumbnailImage: result.url }));
+            setIsLoading(false);
             console.log('Uploading images successfully:', result.url);
         })
         .catch((error) => {
             console.error("Uploading images into api");
+            setIsLoading(false);
         });
     }
 
@@ -333,7 +338,7 @@ const Product = () => {
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Product Image</Form.Label>
                                     <Form.Control
@@ -344,8 +349,9 @@ const Product = () => {
                                         onChange={UploadImage}
                                     />
                                 </Form.Group>
+                                {isLoading && <CustomLoader />}
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Thumbnail Image</Form.Label>
                                     <Form.Control
@@ -356,6 +362,7 @@ const Product = () => {
                                         onChange={UploadImage}
                                     />
                                 </Form.Group>
+                                {isLoading && <CustomLoader />}
                             </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">

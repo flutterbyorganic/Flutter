@@ -701,3 +701,17 @@ textarea {
     font-size: 14px;
     color: #fff;
 }
+.upload-file-wrapper {
+    position: relative;
+    .sweet-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff24;
+    }
+}

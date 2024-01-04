@@ -5,6 +5,7 @@ import closeIcon from '../../../assests/icons/close.svg';
 import Sidebar from "../../sidebar";
 import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
+import CustomLoader from "../../customLoader/customLoader";
 
 const AddBanner = () => {
     const [image, setImage] = useState("");
@@ -16,6 +17,7 @@ const AddBanner = () => {
     const [subCategory, setSubCategory] = useState(null);
     const [banner, setBanner] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         bannerImage: '',
         heading: '',
@@ -73,6 +75,7 @@ const AddBanner = () => {
 
     // for uploading image
     const UploadImage = (e) => {
+        setIsLoading(true);
         setImage(inputRef.current.value);
         let file = e.target.files[0];
         const formDataFile = new FormData();
@@ -80,10 +83,12 @@ const AddBanner = () => {
         postData("/fileUpload", formDataFile)
             .then((result) => {
                 setFormData(pre => ({ ...pre, bannerImage: result.url }));
+                setIsLoading(false);
                 console.log('Uploading images successfully:', result.url);
             })
             .catch((error) => {
                 console.error("Uploading images into api");
+                setIsLoading(false);
             });
     }
 
@@ -318,7 +323,7 @@ const AddBanner = () => {
                                     </Form.Group>
                                 </div>
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Banner Image</Form.Label>
                                     <Form.Control
@@ -329,6 +334,7 @@ const AddBanner = () => {
                                         onChange={UploadImage}
                                     />
                                 </Form.Group>
+                                {isLoading && <CustomLoader />}
                             </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">

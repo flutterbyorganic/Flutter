@@ -3,6 +3,7 @@ import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } 
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
+import CustomLoader from "../../customLoader/customLoader";
 
 const Category = () => {
     const [image, setImage] = useState("");
@@ -12,6 +13,7 @@ const Category = () => {
     const handleShow = () => setShow(true);
     const [category, setCategory] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         priority: '',
@@ -61,6 +63,7 @@ const Category = () => {
 
     // for uploading image
     const UploadImage = (e) => {
+        setIsLoading(true);
         setImage(inputRef.current.value);
         let file = e.target.files[0];
         const formDataFile = new FormData();
@@ -69,9 +72,11 @@ const Category = () => {
         .then((result) => {
             setFormData(pre => ({ ...pre, logo: result.url }));
             console.log('Uploading images successfully:', result.url);
+            setIsLoading(false);
         })
         .catch((error) => {
             console.error("Uploading images into api");
+            setIsLoading(false);
         });
     }
 
@@ -290,11 +295,12 @@ const Category = () => {
                                     </Form.Group>
                                 </div>
                             </Col>
-                            <Col xs={12} sm={12} className=" ">
+                            <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} />
+                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} disabled={isLoading} />
                                 </Form.Group>
+                                {isLoading && <CustomLoader />}
                             </Col>
                         </Row>
                         <div className="footer-modal">
