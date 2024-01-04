@@ -141,7 +141,7 @@ const AddBanner = () => {
             setCategory(result?.data);
         }catch(err) {
             throw err;
-        }   
+        }
     }
 
     const fetchBanner = async (id) => {

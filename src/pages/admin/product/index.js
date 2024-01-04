@@ -19,6 +19,7 @@ const Product = () => {
     const [product, setProduct] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoad, setIsLoad] = useState(false);
     const [formData, setFormData] = useState({
         productName: '',
         description: '',
@@ -80,22 +81,24 @@ const Product = () => {
     };
 
     // for uploading image
-    const UploadImage = (e) => {
-        setIsLoading(true);
+    const UploadImage = (e, ref) => {
+        ref === 'productImage' ? setIsLoading(true) : setIsLoad(true);
+
         setImage(inputRef.current.value);
         let file = e.target.files[0];
         const formDataFile = new FormData();
         formDataFile.append("file", file);
         postData("/fileUpload", formDataFile)
         .then((result) => {
-            setFormData(pre => ({ ...pre, productImage: result.url }));
-            setFormData(pre => ({ ...pre, thumbnailImage: result.url }));
+            setFormData(pre => ({ ...pre, productImage: result.url, thumbnailImage: result.url }));
             setIsLoading(false);
+            setIsLoad(false);
             console.log('Uploading images successfully:', result.url);
         })
         .catch((error) => {
             console.error("Uploading images into api");
             setIsLoading(false);
+            setIsLoad(false);
         });
     }
 
@@ -147,7 +150,7 @@ const Product = () => {
             setCategory(result?.data);
         }catch(err) {
             throw err;
-        }   
+        }
     }
 
     const fetchProduct = async (id) => {
@@ -345,7 +348,7 @@ const Product = () => {
                                         ref={inputRef}
                                         value={formData.image}
                                         name='productImage'
-                                        onChange={UploadImage}
+                                        onChange={(e) => UploadImage(e, "productImage")}
                                     />
                                 </Form.Group>
                                 {isLoading && <CustomLoader />}
@@ -358,10 +361,11 @@ const Product = () => {
                                         ref={inputRef}
                                         value={formData.image}
                                         name='thumbnailImage'
-                                        onChange={UploadImage}
+                                        // onChange={UploadImage}
+                                        onChange={(e) => UploadImage(e, "thumbnailImage")}
                                     />
                                 </Form.Group>
-                                {isLoading && <CustomLoader />}
+                                {isLoad && <CustomLoader />}
                             </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">
