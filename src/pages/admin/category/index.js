@@ -110,7 +110,6 @@ const Category = () => {
     };
 
     const fetchCategories = async (id, searchValue) => {
-        console.log('hnhvfh', id);
         let routeName = id ? `/categories/${id}` : '/categories';
         if(searchValue){
             routeName= routeName +`?filter=${searchValue}`
