@@ -1,5 +1,5 @@
 import { Container, Image, Row, Nav, Button, Col, ListGroup, NavLink } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 // import './assests/scss/main.scss';
 import "slick-carousel/slick/slick.css";
@@ -22,6 +22,7 @@ import seller from '../assests/img/seller.png';
 import seller2 from '../assests/img/seller2.png';
 import seller3 from '../assests/img/seller3.png';
 import ExtraProduct from './extraproduct';
+import { fetchData } from '../apis/api';
 
 const Home = () => {
 
@@ -29,6 +30,7 @@ const Home = () => {
 
   const searchClose = () => setShow(false);
   const searchShow = () => setShow(true);
+  const [homeBanners, setHomeBanners] = useState(null);
 
   const settings1 = {
     dots: false,
@@ -64,6 +66,17 @@ const Home = () => {
     ],
   };
 
+  useEffect(() => {
+    // Call the fetchData function
+    fetchData('/banners')
+      .then((result) => {
+        setHomeBanners(result);
+      })
+      .catch((error) => {
+        console.error('Error while fetching banners:', error);
+      });
+  }, []);
+
   return (
     <>
       <div>
@@ -80,15 +93,13 @@ const Home = () => {
           </div> */}
           <div className="main-slider">
             <Slider {...settings1}>
-              <div className="slider-item">
-                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
-              </div>
-              <div className="slider-item">
-                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
-              </div>
-              <div className="slider-item">
-                <Image src={banner} alt="Seller icon" className="w-100" height={500} />
-              </div>
+              {
+                homeBanners?.map((item) => (
+                <div className="slider-item" key={item?._id} >
+                  <Image src={item.bannerImage} alt="Seller icon" className="w-100" height={500} />
+                </div>
+                ))
+              }
             </Slider>
           </div>
         </div>
