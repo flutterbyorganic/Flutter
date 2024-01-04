@@ -135,14 +135,13 @@ const AddBanner = () => {
             });
     }
 
-    const fetchCategories = (id = '') => {
-        fetchData("/categories")
-            .then((result) => {
-                setCategory(result);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    const fetchCategories = async () => {
+        try{
+            const result = await fetchData("/categories?isPaginate=false");
+            setCategory(result?.data);
+        }catch(err) {
+            throw err;
+        }   
     }
 
     const fetchBanner = async (id) => {

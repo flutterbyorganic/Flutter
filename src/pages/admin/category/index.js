@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } from "react-bootstrap";
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 import CustomLoader from "../../customLoader/customLoader";
+import debounce from 'lodash/debounce';
 
 const Category = () => {
     const [image, setImage] = useState("");
@@ -108,8 +109,12 @@ const Category = () => {
         }
     };
 
-    const fetchCategories = async (id) => {
-        const routeName = id ? `/categories/${id}` : '/categories';
+    const fetchCategories = async (id, searchValue) => {
+        console.log('hnhvfh', id);
+        let routeName = id ? `/categories/${id}` : '/categories';
+        if(searchValue){
+            routeName= routeName +`?filter=${searchValue}`
+        }
         try {
             const categoryData = await fetchData(routeName)
             if (id) {
@@ -123,13 +128,22 @@ const Category = () => {
                 setIsEdit(true)
                 handleShow();
             } else {
-                setCategory(categoryData);
+                setCategory(categoryData?.data);
                 setIsEdit(false)
             }
         } catch (err) {
             console.error('Error fetching data:', err);
         }
     }
+    function handleSearch(query) {
+        try {
+            fetchCategories(null, query);
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    }
+        
+    const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
 
     // for fetch the data
     useEffect(() => {
@@ -153,6 +167,7 @@ const Category = () => {
                                         className="form-input search-input"
                                         type="search"
                                         placeholder="Search..."
+                                        onChange={(e) => debouncedHandleSearch(e.target.value)}
                                     />
                                 </InputGroup>
                             </Form>

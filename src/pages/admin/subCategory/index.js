@@ -139,15 +139,13 @@ const SubCategory = () => {
         }
     }
 
-    const fetchCategories = (id = '') => {
-        fetchData("/categories")
-            .then((result) => {
-                setCategory(result);
-                console.log("result result", result);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+    const fetchCategories = async () => {
+        try{
+            const result = await fetchData("/categories?isPaginate=false");
+            setCategory(result?.data);
+        }catch(err) {
+            throw err;
+        }   
     }
 
     // for fetch the data
