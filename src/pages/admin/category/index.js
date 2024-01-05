@@ -5,8 +5,13 @@ import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 import CustomLoader from "../../customLoader/customLoader";
 import debounce from 'lodash/debounce';
+import CustomPagination from '../../../components/common/CustomPagination';
+import { NUMBER } from "../../../constant/number";
+import { useNavigate } from "react-router-dom";
 
+ 
 const Category = () => {
+    const navigate = useNavigate();
     const [image, setImage] = useState("");
     const inputRef = useRef();
     const [show, setShow] = useState(false);
@@ -141,14 +146,24 @@ const Category = () => {
             console.error('Error fetching search results:', error);
         }
     }
+
+    const handlePagination = (selectedPage, s) => {
+        navigate.push({
+          pathname: '/categories',
+          query: { page: selectedPage, query: s },
+        });
+    };
         
     const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
+
+    const totalEntries = category?.totalCount;
 
     // for fetch the data
     useEffect(() => {
         // Call the fetchData function
         fetchCategories();
     }, []);
+    const countTotal = Math.ceil(totalEntries / NUMBER.TEN);
 
     return (
         <>
@@ -251,6 +266,12 @@ const Category = () => {
                             ))
                             }
                         </div>
+                        <CustomPagination
+                            countTotal={20}
+                            pageSelected={1}
+                            setPageSelected={handlePagination}
+                            totalEntries={totalEntries}
+                        />
                     </div>
                 </div>
             </div >
