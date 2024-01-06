@@ -7,11 +7,8 @@ import CustomLoader from "../../customLoader/customLoader";
 import debounce from 'lodash/debounce';
 import CustomPagination from '../../../components/common/CustomPagination';
 import { NUMBER } from "../../../constant/number";
-import { useNavigate } from "react-router-dom";
-
  
 const Category = () => {
-    const navigate = useNavigate();
     const [image, setImage] = useState("");
     const inputRef = useRef();
     const [show, setShow] = useState(false);
@@ -26,6 +23,9 @@ const Category = () => {
         status: '',
         logo: '',
     });
+    const [page, setPage] = useState(1);
+    const [sorted, setSorted] = useState(false);
+
 
     // for deleting the row
     const [selectedItemId, setSelectedItemId] = useState(null);
@@ -55,7 +55,7 @@ const Category = () => {
     }
 
     const apiRefresh = () => {
-        fetchCategories();
+        fetchCategories(null, null, true);
         handleClose();
     }
 
@@ -114,10 +114,14 @@ const Category = () => {
         }
     };
 
-    const fetchCategories = async (id, searchValue) => {
+    const fetchCategories = async (id, searchValue, isPaginate = true, pageData=1, sort='name', sortBy='asc') => {
         let routeName = id ? `/categories/${id}` : '/categories';
-        if(searchValue){
-            routeName= routeName +`?filter=${searchValue}`
+        if(searchValue && isPaginate){
+            routeName= routeName+ `?filter=${searchValue}&page=${pageData}&limit=${NUMBER.TEN}&sort=${sort}&sortBy=${sortBy}&isPaginate=true`
+        } else if(isPaginate){
+            routeName= routeName +`?page=${pageData}&limit=${NUMBER.TEN}&sort=${sort}&sortBy=${sortBy}&isPaginate=true`
+        } else{
+            routeName= routeName +`?filter=${searchValue}&sort=${sort}&sortBy=${sortBy}` 
         }
         try {
             const categoryData = await fetchData(routeName)
@@ -132,7 +136,7 @@ const Category = () => {
                 setIsEdit(true)
                 handleShow();
             } else {
-                setCategory(categoryData?.data);
+                setCategory(categoryData);
                 setIsEdit(false)
             }
         } catch (err) {
@@ -146,25 +150,27 @@ const Category = () => {
             console.error('Error fetching search results:', error);
         }
     }
+    const totalEntries = category?.totalCount;
 
-    const handlePagination = (selectedPage, s) => {
-        navigate.push({
-          pathname: '/categories',
-          query: { page: selectedPage, query: s },
-        });
+    const handlePagination = (selectedPage) => {
+        setPage(selectedPage);
+        fetchCategories(null, null, true, selectedPage);
     };
-        
+    const countTotal = Math.ceil(totalEntries / NUMBER.TEN);
     const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
 
-    const totalEntries = category?.totalCount;
+    const handleSort = (name) => {
+        setSorted(!sorted);
+        const sortBy = sorted ? 'asc' : 'desc'; 
+        fetchCategories(null, null, true, page, name, sortBy);
+      };
+    
 
     // for fetch the data
     useEffect(() => {
         // Call the fetchData function
-        fetchCategories();
-    }, []);
-    const countTotal = Math.ceil(totalEntries / NUMBER.TEN);
-
+        fetchCategories(null, null, true);
+    },[]);
     return (
         <>
             <div className="admin-common-body">
@@ -202,7 +208,7 @@ const Category = () => {
                                 <div className="th flex-table-column-20" >
                                     <span className="table-heading">
                                         <span>Name</span>
-                                        <span className="icon-filter-custom">
+                                        <span className="icon-filter-custom" onClick={(e)=> handleSort('name')}>
                                             <img src={defaultIcon} alt="filter icon" />
                                         </span>
                                     </span>
@@ -215,7 +221,7 @@ const Category = () => {
                                 <div className="th flex-table-column-20" >
                                     <span className="table-heading">
                                         <span>Priority</span>
-                                        <span className="icon-filter-custom">
+                                        <span className="icon-filter-custom" onClick={(e)=> handleSort('priority')}>
                                             <img src={defaultIcon} alt="filter icon" />
                                         </span>
                                     </span>
@@ -233,7 +239,7 @@ const Category = () => {
                             </div>
                         </div>
                         <div className="tbody">
-                            {category?.map((cat, index) => (
+                            {category?.data?.map((cat, index) => (
                                 <div className="row tr" key={index + 1}>
                                     <div className="td flex-table-column-20">
                                         <p className="listing-title text-capitalize">{cat.name}</p>
@@ -267,8 +273,8 @@ const Category = () => {
                             }
                         </div>
                         <CustomPagination
-                            countTotal={20}
-                            pageSelected={1}
+                            countTotal={countTotal}
+                            pageSelected={page}
                             setPageSelected={handlePagination}
                             totalEntries={totalEntries}
                         />

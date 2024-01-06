@@ -5,6 +5,7 @@ import { NUMBER } from '../../constant/number'
 const CustomPagination = ({
   countTotal, pageSelected, setPageSelected, totalEntries,
 }) => {
+  console.log('pageSelected', pageSelected);
   const getPageSummeryTxt = (currentPage, total, limit = NUMBER.TEN) => {
     let toParams = currentPage * limit;
     if (toParams > total) {
