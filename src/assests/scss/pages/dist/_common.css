@@ -483,6 +483,21 @@
   font-weight: 100;
 }
 
+.login-page .form-control {
+  background-color: #fff;
+}
+.login-page .form-control:-webkit-autofill, .login-page .form-control:-webkit-autofill:hover, .login-page .form-control:-webkit-autofill:focus, .login-page .form-control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+  -webkit-text-fill-color: #222 !important;
+  font-size: 14px;
+}
+.login-page .form-control:hover, .login-page .form-control:focus {
+  -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+  color: #222 !important;
+  font-size: 14px;
+  background-color: unset;
+  border: 0;
+}
 .login-page .heading-sec {
   position: relative;
 }
@@ -625,4 +640,115 @@ textarea {
   justify-content: center;
   align-items: center;
   background-color: #ffffff24;
+}
+
+.custom-pagination {
+  padding: 10px 30px 40px 26px;
+}
+.custom-pagination .custom-pagination-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.custom-pagination .custom-pagination-wrap .pagination-left {
+  font-size: 13px;
+  color: #4c4c4c;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul {
+  display: flex;
+  align-items: center;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li {
+  cursor: pointer;
+  margin: 0 10px 0 0;
+  border-radius: 3px;
+  border: solid 1px #c0cce8;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  line-height: 0.77;
+  color: #757575;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li.selected, .custom-pagination .custom-pagination-wrap .pagination-right ul li:hover {
+  border: solid 1px #ff5c39;
+  background-color: #ff5c39;
+  color: #fff;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li.selected.previous a, .custom-pagination .custom-pagination-wrap .pagination-right ul li.selected.next a, .custom-pagination .custom-pagination-wrap .pagination-right ul li:hover.previous a, .custom-pagination .custom-pagination-wrap .pagination-right ul li:hover.next a {
+  color: #fff;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li.previous a {
+  color: #757575;
+  text-decoration: unset;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li.next a {
+  color: #757575;
+  text-decoration: unset;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right ul li a {
+  width: auto;
+  height: 28px;
+  padding: 9px 10px;
+}
+.custom-pagination .custom-pagination-wrap .pagination-right .previous.disabled, .custom-pagination .custom-pagination-wrap .pagination-right .next.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.crop-btn {
+  height: 38px;
+  font-size: 14px;
+  background-color: #ff5c39;
+  color: #fff;
+  box-shadow: unset;
+  outline: 0;
+  font-weight: 500;
+  border: 0;
+  border-radius: 4px;
+  padding: 0 15px 2px 15px;
+  margin-top: 20px;
+}
+
+.toast-common .Toastify__toast {
+  border-radius: 5px;
+  margin-bottom: 0;
+  min-height: 10px;
+}
+@media (max-width: 576px) {
+  .toast-common .Toastify__toast {
+    margin: 10px 10px 0 10px;
+  }
+}
+.toast-common .Toastify__toast--success {
+  background-color: #6ac27f !important;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 0 !important;
+}
+.toast-common .Toastify__toast--success svg {
+  fill: #fff;
+}
+.toast-common .Toastify__toast--error {
+  background-color: #fe646f !important;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 0 !important;
+}
+.toast-common .Toastify__toast--error svg {
+  fill: #fff;
+}
+.toast-common .Toastify__close-button--light {
+  color: #efefef !important;
+  opacity: 1;
+}
+.toast-common .Toastify__close-button {
+  align-self: center;
+}
+.toast-common .Toastify__toast-body div {
+  line-height: normal;
+  color: #efefef;
 }

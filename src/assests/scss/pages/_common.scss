@@ -570,12 +570,27 @@
 
 // login css
 .login-page {
+    .form-control {
+        background-color: #fff;
+    }
+    .form-control:-webkit-autofill, .form-control:-webkit-autofill:hover, .form-control:-webkit-autofill:focus, .form-control:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+        -webkit-text-fill-color: #222 !important;
+        font-size: 14px;
+      }
+      .form-control:hover, .form-control:focus {
+        -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+        color: #222 !important;
+        font-size: 14px;
+        background-color: unset;
+        border: 0;
+    }
     .heading-sec {
         position: relative;
         img {
             height: 169px;
         }
-        h1 {
+        h1 { 
             font-family: "Times New Roman",Times,serif;
             font-weight: 400;
             position: absolute;
@@ -781,3 +796,61 @@ textarea {
       }
     }
   }
+.crop-btn {
+    height: 38px;
+    font-size: 14px;
+    background-color: #ff5c39;
+    color: #fff;
+    box-shadow: unset;
+    outline: 0;
+    font-weight: 500;
+    border: 0;
+    border-radius: 4px;
+    padding: 0 15px 2px 15px;
+    margin-top: 20px;
+}
+.toast-common {
+    .Toastify__toast {
+        // background-color: #141414;
+        border-radius: 5px;
+        // border: solid 1px #757575;
+        margin-bottom: 0;
+        min-height: 10px;
+        @media (max-width: 576px){
+            margin: 10px 10px 0 10px;
+        }
+    }
+    .Toastify__toast--success {
+        background-color: #6ac27f !important;
+        color: #fff;
+        font-size: 13px;
+        border-radius: 5px;
+        border: 0 !important;
+        svg {
+            fill: #fff;
+        }
+    }
+    .Toastify__toast--error {
+        background-color: #fe646f !important;
+        color: #fff;
+        font-size: 13px;
+        border-radius: 5px;
+        border: 0 !important;
+        svg {
+            fill: #fff;
+        }
+    }
+    .Toastify__close-button--light {
+        color: #efefef !important;
+        opacity: 1;
+    }
+    .Toastify__close-button {
+        align-self: center;
+    }
+    .Toastify__toast-body {
+        div {
+            line-height: normal;
+            color: #efefef;
+        }
+    }
+}

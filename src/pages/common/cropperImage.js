@@ -39,13 +39,13 @@ const CropperImage = ({previewImage, croppedImage}) => {
         <>
         <Cropper
             src={previewImage}
-            style={{ height: 400, width: '100%' }}
+            style={{ height: 300, width: '100%' }}
             aspectRatio={16 / 9} // Set your desired aspect ratio
             guides={true}
             crop={onCrop}
             ref={cropperRef}
         />
-        <button onClick={cropImage}>Crop Image</button>
+        <button className="crop-btn" onClick={cropImage}>Crop Image</button>
         </>
     )
 }
