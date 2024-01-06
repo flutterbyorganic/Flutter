@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Row, Dropdown, Button, InputGroup, DropdownButton, Form, Col, Modal, } from "react-bootstrap";
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 import defaultIcon from '../../../assests/icons/defaultSort.svg';
 import closeIcon from '../../../assests/icons/close.svg';
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 import CustomLoader from "../../customLoader/customLoader";
+import CropperImage from "../../common/cropperImage.js";
 import debounce from 'lodash/debounce';
 import CustomPagination from '../../../components/common/CustomPagination';
 import { NUMBER } from "../../../constant/number";
- 
+
 const Category = () => {
     const [image, setImage] = useState("");
-    const inputRef = useRef();
+    // const inputRef = useRef();
+    const cropperRef = useRef(null);
+    const [previewImage, setPreviewImage] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -62,18 +67,25 @@ const Category = () => {
     //for submiting data into database
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setImage(inputRef.current.value);
+        // setImage(inputRef.current.value);
         console.log({[name]: value}, '[name]: value[name]: value');
         setFormData(pre => ({ ...pre, [name]: value}));
     };
 
     // for uploading image
     const UploadImage = (e) => {
-        setIsLoading(true);
-        setImage(inputRef.current.value);
-        let file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+        setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+        console.log("previewImage ", previewImage);
+    }
+
+    const croppedImage = (image) => {
+        console.log('----', image);
         const formDataFile = new FormData();
-        formDataFile.append("file", file);
+        formDataFile.append("file", image);
         postData("/fileUpload", formDataFile)
         .then((result) => {
             setFormData(pre => ({ ...pre, logo: result.url }));
@@ -161,10 +173,9 @@ const Category = () => {
 
     const handleSort = (name) => {
         setSorted(!sorted);
-        const sortBy = sorted ? 'asc' : 'desc'; 
+        const sortBy = sorted ? 'asc' : 'desc';
         fetchCategories(null, null, true, page, name, sortBy);
-      };
-    
+    };
 
     // for fetch the data
     useEffect(() => {
@@ -339,9 +350,10 @@ const Category = () => {
                             <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Logo (Optional)</Form.Label>
-                                    <Form.Control type="file" ref={inputRef} value={image} name='logo' onChange={UploadImage} disabled={isLoading} />
+                                    <Form.Control type="file" name='logo' onChange={UploadImage} disabled={isLoading} />
                                 </Form.Group>
                                 {isLoading && <CustomLoader />}
+                                {previewImage && ( <CropperImage previewImage={previewImage} croppedImage= {croppedImage} />)}
                             </Col>
                         </Row>
                         <div className="footer-modal">
