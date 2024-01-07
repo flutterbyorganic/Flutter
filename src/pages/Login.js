@@ -5,6 +5,7 @@ import { postData } from '../apis/api';
 import 'react-toastify/dist/ReactToastify.css';
 import loginBg from '../assests/img/login-title.png';
 import tick from '../assests/img/tick.png';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +78,7 @@ const Login = () => {
             <ListGroup.Item><Image src={tick} />Update your personal preferences</ListGroup.Item>
             <ListGroup.Item><Image src={tick} />Enjoy a speedier checkout!</ListGroup.Item>
           </ListGroup>
-          <Button className="btn-login2 w-100">Join Now</Button>
+          <Link className="btn-login2 w-100" to="/signup">Sign Up</Link>
         </Col>
       </Row>
     </div>

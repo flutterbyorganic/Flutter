@@ -686,6 +686,10 @@
     text-decoration: none;
     height: 50px !important;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
     &:hover,
     &:focus,
     &:active {
