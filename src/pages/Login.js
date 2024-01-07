@@ -5,9 +5,10 @@ import { postData } from '../apis/api';
 import 'react-toastify/dist/ReactToastify.css';
 import loginBg from '../assests/img/login-title.png';
 import tick from '../assests/img/tick.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -46,6 +47,9 @@ const Login = () => {
       sessionStorage.setItem("token", result?.user?.token);
       sessionStorage.setItem("result", JSON.stringify(result?.user));
       toast.success(result?.message);
+      setTimeout(() => {
+        navigate('/category');
+      }, 1000);
     } catch (err) {
       throw toast.error(err?.message);
     }

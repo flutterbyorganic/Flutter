@@ -33,7 +33,9 @@ const Signup = () => {
       const result = await postData(routeName, values);
       console.log("Signup successfully ", result?.message);
       toast.success(result?.message);
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     } catch (err) {
       toast.error(err?.message);
     }
