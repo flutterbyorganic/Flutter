@@ -53,7 +53,7 @@ const Login = () => {
         <h1>Log In</h1>
       </div>
       <Form onSubmit={handleSubmit(handlePostData)}>
-        <Row>
+        <Row> 
           <Col xs={12} md={6} className="login-left">
             <p><span>*</span>Required Field</p>
             <FloatingLabel controlId="floatingInput" label="Email address" className="form-input mb-30">

@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-const signupSchema = Yup.object().shape({
+const signupSchema = Yup.object().shape({ 
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   mobileNumber: Yup.string().required('Mobile number is required').min(6, 'Mobile number must be at least 6 characters')
