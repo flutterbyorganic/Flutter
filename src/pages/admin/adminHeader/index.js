@@ -1,20 +1,25 @@
-import { useState } from "react";
-import { Container, Dropdown, Image, Nav, Navbar } from "react-bootstrap";
+import { Container, Dropdown, Nav, Navbar } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 
-import { Link } from "react-router-dom";
 
 const AdminHeader = () => {
-    const [show, setShow] = useState(false);
+    const navigate = useNavigate();
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const logout = () =>{
+        sessionStorage.clear();
+        toast.success('Logout successfully.');
+        setTimeout(()=>{
+            navigate('/login');
+        },1000)
+    }
 
     return (
         <>
+         <ToastContainer className="toast-common" />
           <Navbar className="header-nav" expand="lg">
                 <Container fluid className="header-container">
                     <Navbar.Brand className= "manage-subscription-header header-logo">
-                        {/* <img className="logo" src={Logo} alt="Logo" width={71} /> */}
                     </Navbar.Brand>
                     <Navbar className="manage-subscription-header">
                         <Nav className="nav-menu">
@@ -26,7 +31,7 @@ const AdminHeader = () => {
 
                                     <Dropdown.Menu>
                                         <Dropdown.Item>Login</Dropdown.Item>
-                                        <Dropdown.Item>Logout</Dropdown.Item>
+                                        <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Nav.Item>
