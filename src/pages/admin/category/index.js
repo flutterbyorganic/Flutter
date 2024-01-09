@@ -74,6 +74,7 @@ const Category = () => {
 
     // for uploading image
     const UploadImage = (e) => {
+        setIsLoading(true);
         const reader = new FileReader();
         reader.onload = () => {
         setPreviewImage(reader.result);
@@ -353,6 +354,8 @@ const Category = () => {
                                     <Form.Control type="file" name='logo' onChange={UploadImage} disabled={isLoading} />
                                 </Form.Group>
                                 {isLoading && <CustomLoader />}
+                            </Col>
+                            <Col xs={12} sm={12} className="p-0">
                                 {previewImage && ( <CropperImage previewImage={previewImage} croppedImage= {croppedImage} />)}
                             </Col>
                         </Row>

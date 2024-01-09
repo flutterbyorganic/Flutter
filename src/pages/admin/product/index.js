@@ -6,11 +6,13 @@ import Sidebar from "../../sidebar";
 import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 import CustomLoader from "../../customLoader/customLoader";
+import CropperImage from "../../common/cropperImage";
 
 const Product = () => {
     const [image, setImage] = useState("");
     const [image2, setImage2] = useState("");
     const inputRef = useRef();
+    const [previewImage, setPreviewImage] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -69,6 +71,7 @@ const Product = () => {
     }
 
     const apiRefresh = () => {
+        fetchProduct()
         fetchSubCategories();
         handleClose();
     }
@@ -83,11 +86,18 @@ const Product = () => {
     // for uploading image
     const UploadImage = (e, ref) => {
         ref === 'productImage' ? setIsLoading(true) : setIsLoad(true);
+        const reader = new FileReader();
+        reader.onload = () => {
+        setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+        console.log("previewImage ", previewImage);
+    }
 
-        setImage(inputRef.current.value);
-        let file = e.target.files[0];
+    const croppedImage = (image) => {
+        console.log('----', image);
         const formDataFile = new FormData();
-        formDataFile.append("file", file);
+        formDataFile.append("file", image);
         postData("/fileUpload", formDataFile)
         .then((result) => {
             setFormData(pre => ({ ...pre, productImage: result.url, thumbnailImage: result.url }));
@@ -343,29 +353,22 @@ const Product = () => {
                             <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Product Image</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        ref={inputRef}
-                                        value={formData.image}
-                                        name='productImage'
-                                        onChange={(e) => UploadImage(e, "productImage")}
-                                    />
+                                    <Form.Control type="file" name='productImage' onChange={(e) => UploadImage(e, "productImage")} disabled={isLoading} />
                                 </Form.Group>
                                 {isLoading && <CustomLoader />}
                             </Col>
+                            <Col xs={12} sm={12} className="p-0">
+                                {previewImage && ( <CropperImage previewImage={previewImage} croppedImage= {croppedImage} />)}
+                            </Col>
                             <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
-                                    <Form.Label>Thumbnail Image</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        ref={inputRef}
-                                        value={formData.image}
-                                        name='thumbnailImage'
-                                        // onChange={UploadImage}
-                                        onChange={(e) => UploadImage(e, "thumbnailImage")}
-                                    />
+                                    <Form.Label>Product Image</Form.Label>
+                                    <Form.Control type="file" name='Thumbnail' onChange={(e) => UploadImage(e, "thumbnailImage")} disabled={isLoad} />
                                 </Form.Group>
                                 {isLoad && <CustomLoader />}
+                            </Col>
+                            <Col xs={12} sm={12} className="p-0">
+                                {previewImage && ( <CropperImage previewImage={previewImage} croppedImage= {croppedImage} />)}
                             </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">

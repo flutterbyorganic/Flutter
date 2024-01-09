@@ -9,10 +9,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-const signupSchema = Yup.object().shape({ 
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const signupSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
-  mobileNumber: Yup.string().required('Mobile number is required').min(6, 'Mobile number must be at least 6 characters')
+  mobileNumber: Yup.string()
+    .required('Mobile number is required')
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, 'Mobile number must be at least 6 characters')
     .max(12, 'Mobile number must not exceed 12 characters'),
   email: Yup.string().required('Email is required').email('Email is invalid'),
   password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters')
@@ -89,7 +93,7 @@ const Signup = () => {
             </FloatingLabel>
 
             <FloatingLabel controlId="mobileNumber" label="Mobile Number" className="form-input mb-30">
-              <Form.Control type="text" name="mobileNumber" placeholder="Enter your mobile number"
+              <Form.Control type="number" name="mobileNumber" placeholder="Enter your mobile number"
               {...register("mobileNumber")} className={`form-control ${errors.mobileNumber ? 'is-invalid' : ''}`} />
               {errors.mobileNumber && (
                 <Form.Text className="invalid-feedback">

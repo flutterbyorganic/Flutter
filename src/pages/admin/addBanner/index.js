@@ -6,10 +6,12 @@ import Sidebar from "../../sidebar";
 import AdminHeader from "../adminHeader";
 import { deleteData, fetchData, postData, updateData } from "../../../apis/api";
 import CustomLoader from "../../customLoader/customLoader";
+import CropperImage from "../../common/cropperImage";
 
 const AddBanner = () => {
     const [image, setImage] = useState("");
     const inputRef = useRef();
+    const [previewImage, setPreviewImage] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -76,20 +78,28 @@ const AddBanner = () => {
     // for uploading image
     const UploadImage = (e) => {
         setIsLoading(true);
-        setImage(inputRef.current.value);
-        let file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+        setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+        console.log("previewImage ", previewImage);
+    }
+
+    const croppedImage = (image) => {
+        console.log('----', image);
         const formDataFile = new FormData();
-        formDataFile.append("file", file);
+        formDataFile.append("file", image);
         postData("/fileUpload", formDataFile)
-            .then((result) => {
-                setFormData(pre => ({ ...pre, bannerImage: result.url }));
-                setIsLoading(false);
-                console.log('Uploading images successfully:', result.url);
-            })
-            .catch((error) => {
-                console.error("Uploading images into api");
-                setIsLoading(false);
-            });
+        .then((result) => {
+            setFormData(pre => ({ ...pre, bannerImage: result.url }));
+            setIsLoading(false);
+            console.log('Uploading images successfully:', result.url);
+        })
+        .catch((error) => {
+            console.error("Uploading images into api");
+            setIsLoading(false);
+        });
     }
 
     const handlePostData = (e) => {
@@ -112,8 +122,8 @@ const AddBanner = () => {
             updateData(routeName, formData)
                 .then((result) => {
                     console.log('Banner data edit successfully:', result);
-                    resetFormData();
                     apiRefresh();
+                    resetFormData();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -325,22 +335,19 @@ const AddBanner = () => {
                             <Col xs={12} sm={12} className="upload-file-wrapper">
                                 <Form.Group className="form-mt-space react-upload-file">
                                     <Form.Label>Banner Image</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        ref={inputRef}
-                                        value={formData.image}
-                                        name='bannerImage'
-                                        onChange={UploadImage}
-                                    />
+                                    <Form.Control type="file" name='bannerImage' onChange={UploadImage} disabled={isLoading} />
                                 </Form.Group>
                                 {isLoading && <CustomLoader />}
+                            </Col>
+                            <Col xs={12} sm={12} className="p-0">
+                                {previewImage && ( <CropperImage previewImage={previewImage} croppedImage= {croppedImage} />)}
                             </Col>
                             <Col xs={12} sm={12} className=" ">
                                 <Form.Group className="form-mt-space">
                                     <Form.Label>Heading</Form.Label>
                                     <div className="wrap-input">
                                         <Form.Control
-                                            type="type"
+                                            type="text"
                                             className="form-input"
                                             placeholder="Enter heading"
                                             name="heading"
@@ -355,7 +362,7 @@ const AddBanner = () => {
                                     <Form.Label>Sub-Heading</Form.Label>
                                     <div className="wrap-input">
                                         <Form.Control
-                                            type="type"
+                                            type="text"
                                             className="form-input"
                                             placeholder="Enter heading"
                                             name="subheading"
@@ -370,7 +377,7 @@ const AddBanner = () => {
                                     <Form.Label>CTA Button (e.g Register/Book Now)</Form.Label>
                                     <div className="wrap-input">
                                         <Form.Control
-                                            type="type"
+                                            type="text"
                                             className="form-input"
                                             placeholder="Enter ctaButton"
                                             name="ctaButton"
