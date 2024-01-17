@@ -92,7 +92,7 @@ const Bestsellers = () => {
                   <Image src={item.productImage} alt="Seller icon" />
                   <span className="discount">{item.discountPrice}%</span>
                 </div>
-                <Nav.Link className="seller-title">Tobacco Absolute Bath & Shower Gel 10fl oz</Nav.Link>
+                <Nav.Link className="seller-title">{item.productName}</Nav.Link>
                 <div className="slider-item-wrap">
                   <div className="product-price">
                     <span className="sale-price">{item.totalPrice}</span>
